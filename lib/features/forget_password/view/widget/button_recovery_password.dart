@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myproject/components/themeData/box_decoration.dart';
 import 'package:myproject/components/themeData/function_app.dart';
 import 'package:myproject/components/widget/bottom_app.dart';
 import 'package:myproject/features/forget_password/bloc/auth_bloc.dart';

@@ -69,24 +69,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-/*  Future<void> _onResetPasswordRequested(
-    ResetPasswordRequested event,
-    Emitter<AuthState> emit,
-  ) async {
-    emit(state.copyWith(status: AuthStatus.loading));
-
-    try {
-      await userRepository.resetPassword(event.email);
-      emit(state.copyWith(status: AuthStatus.success));
-    } on FirebaseAuthException catch (e) {
-      emit(
-        state.copyWith(
-          status: AuthStatus.failure,
-          errorMessage: _getErrorMessage(e.code),
-        ),
-      );
-    }
-  }*/
 /// تحويل أخطاء Firebase إلى رسائل مفهومة
   String  _getFirebaseErrorMessage(String errorCode) {
     switch (errorCode) {
@@ -187,12 +169,6 @@ Future<void> _onSendResetCodeRequested(
         errorMessage: null,
       ));
       print('✅ تم إرسال الرمز بنجاح إلى: ${event.email}');
-      /*} on FirebaseAuthException catch (e) {
-        final errorMessage = _getFirebaseErrorMessage(e.code);
-        emit(state.copyWith(
-            status: AuthStatus.failure,
-            errorMessage: errorMessage,
-          ));*/
     } catch (e) {
       log('❌ خطأ في إرسال الرمز: $e');
       emit(AuthState(
@@ -202,73 +178,4 @@ Future<void> _onSendResetCodeRequested(
       ));
     }
   }
-/*
-Stream<AuthState> mapEventToState(AuthEvent event) async* {
-  if (event is SendResetCodeRequested) {
-    yield* _mapSendResetCodeToState(event);
-  } else if (event is VerifyResetCodeRequested) {
-    yield* _mapVerifyResetCodeToState(event);
-  } else if (event is ResetPasswordWithCodeRequested) {
-    yield* _mapResetPasswordWithCodeToState(event);
-  }
-}
-
-Stream<AuthState> _mapSendResetCodeToState(SendResetCodeRequested event) async* {
-  yield state.copyWith(status: AuthStatus.loading);
-  try {
-    await userRepository.sendResetCode(event.email);
-    yield state.copyWith(
-      status: AuthStatus.resetCodeSent,
-      email: event.email,
-      errorMessage: null,
-    );
-  } catch (e) {
-    yield state.copyWith(
-      status: AuthStatus.failure,
-      errorMessage: e.toString(),
-    );
-  }
-}
-
-Stream<AuthState> _mapVerifyResetCodeToState(VerifyResetCodeRequested event) async* {
-  yield state.copyWith(status: AuthStatus.loading);
-  try {
-    final isValid = await userRepository.verifyResetCode(state.email!, event.code);
-    if (isValid) {
-      yield state.copyWith(
-        status: AuthStatus.resetCodeVerified,
-        resetCode: event.code,
-        errorMessage: null,
-      );
-    } else {
-      yield state.copyWith(
-        status: AuthStatus.failure,
-        errorMessage: 'رمز التحقق غير صحيح',
-      );
-    }
-  } catch (e) {
-    yield state.copyWith(
-      status: AuthStatus.failure,
-      errorMessage: e.toString(),
-    );
-  }
-}
-
-Stream<AuthState> _mapResetPasswordWithCodeToState(ResetPasswordWithCodeRequested event) async* {
-  yield state.copyWith(status: AuthStatus.loading);
-  try {
-    await userRepository.resetPasswordWithCode(
-      state.email!,
-      state.resetCode!,
-      event.newPassword,
-    );
-    yield state.copyWith(status: AuthStatus.resetPasswordSuccess);
-  } catch (e) {
-    yield state.copyWith(
-      status: AuthStatus.failure,
-      errorMessage: e.toString(),
-    );
-  }
-}
-*/
 }

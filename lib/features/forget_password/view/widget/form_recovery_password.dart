@@ -49,14 +49,7 @@ class FormRecoveryPassword extends StatelessWidget {
               hintText: 'أدخل الرمز المكون من 6 أرقام',
               iconData: Icons.confirmation_number,
               keyboardType: TextInputType.number,
-              validator:validateCode, /*(value) {
-                if (value!.isEmpty) return 'الرجاء إدخال الرمز';
-                if (value.length != 6) return 'الرمز يجب أن يكون 6 أرقام';
-                if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                  return 'الرمز يجب أن يحتوي على أرقام فقط';
-                }
-                return null;
-              },*/
+              validator:validateCode,
             ),
             SizedBox(height: 20.h),
             CustomTextFiled(
@@ -75,28 +68,9 @@ class FormRecoveryPassword extends StatelessWidget {
               hintText: 'تأكيد كلمة المرور الجديدة',
               iconData: Icons.lock_outline,
               isPassword: true,
-              validator: validateConfirmPassword,/*(value) {
-                if (value != context.read<AuthBloc>().newPasswordController.text) {
-                  return 'كلمات المرور غير متطابقة';
-                }
-                return null;
-              },*/
+              validator: validateConfirmPassword,
             ),
             // في FormRecoveryPassword، أضف هذا للاختبار
-SizedBox(height: 20.h),
-ElevatedButton(
-  onPressed: () {
-    // تعبئة تلقائية للاختبار
-    final authBloc = context.read<AuthBloc>();
-    authBloc.codeController.text = '123456';
-    authBloc.newPasswordController.text = '123456';
-    authBloc.confirmPasswordController.text = '123456';
-    
-    // إعادة التحقق
-    authBloc.formKey.currentState?.validate();
-  },
-  child: Text('تعبئة تلقائية للاختبار'),
-),
           ],
         ),
       ),
