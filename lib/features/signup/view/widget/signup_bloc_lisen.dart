@@ -8,7 +8,6 @@ import 'package:myproject/features/signup/bloc/signup_bloc.dart';
 
 class SignupBlocListener extends StatelessWidget {
   const SignupBlocListener({super.key});
-//flutter run -d chrome
   @override
   Widget build(BuildContext context) {
     return BlocListener<SignUpBloc, SignUpState>(
