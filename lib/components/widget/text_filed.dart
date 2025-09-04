@@ -10,10 +10,12 @@ import 'package:myproject/components/themeData/text_style.dart';
 /// - أنواع مختلفة من لوحات المفاتيح
 class CustomTextFiled extends StatefulWidget {
   final String hintText; 
-  final String icon; 
+  final String? icon; 
+  final IconData? iconData;
   final bool? isPassword;
   final TextEditingController? controller; 
   final String? suffixIcon; 
+  final IconData? suffixIconData; 
   final TextStyle? textStyle;
   final TextStyle? hintStyle; 
   final TextInputType? keyboardType; 
@@ -27,7 +29,15 @@ class CustomTextFiled extends StatefulWidget {
       this.validator,
       this.keyboardType,
       this.hintStyle,
-      required this.hintText, required this.icon , this.isPassword = false , this.controller , this.suffixIcon , this.textStyle});
+      required this.hintText,  
+      this.icon , 
+      this.iconData,
+      this.isPassword = false , 
+      this.controller , 
+      this.suffixIcon , 
+      this.suffixIconData,
+      this.textStyle,
+      });
 
   @override
   State<CustomTextFiled> createState() => _CustomTextFiledState();
@@ -56,11 +66,25 @@ class _CustomTextFiledState extends State<CustomTextFiled> {
         decoration: InputDecoration(
         hintText: widget.hintText,
         hintStyle:  widget.hintStyle ?? black12W600,
-        prefixIcon: Image.asset(widget.icon),
-        suffixIcon: widget.isPassword! ? 
-            IconButton(onPressed: fun, iconSize: 16, color: Colors.grey, 
-              icon: Icon( isEyes ? Icons.visibility : Icons.visibility_off))  :
-                widget.suffixIcon  == null ? null : Image.asset(widget.suffixIcon!),
+        // دعم كل من الصور والأيقونات للـ prefix
+        prefixIcon: widget.icon != null 
+              ? Image.asset(widget.icon!)
+              : (widget.iconData != null 
+                  ? Icon(widget.iconData)
+                  : null),
+        // دعم كل من الصور والأيقونات للـ suffix
+          suffixIcon: widget.isPassword! 
+              ? IconButton(
+                  onPressed: fun, 
+                  iconSize: 16, 
+                  color: Colors.grey, 
+                  icon: Icon(isEyes ? Icons.visibility : Icons.visibility_off)
+                )
+              : (widget.suffixIcon != null
+                  ? Image.asset(widget.suffixIcon!)
+                  : (widget.suffixIconData != null
+                      ? Icon(widget.suffixIconData)
+                      : null)),
         enabledBorder:  outLineprimaryRaduis25,
         focusedBorder: outLineprimaryRaduis25,
         ),

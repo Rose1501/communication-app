@@ -9,7 +9,9 @@ class ButtonApp extends StatelessWidget {
   final String textData;
   final TextStyle? textStyle;
   final BoxDecoration? boxDecoration;
-  final VoidCallback onTop;
+  final VoidCallback? onTop;
+  final Widget? child;
+
   const ButtonApp({
     super.key,
     this.height,
@@ -17,7 +19,8 @@ class ButtonApp extends StatelessWidget {
     required this.textData,
     this.textStyle,
     this.boxDecoration,
-    required this.onTop, 
+    this.onTop,
+    this.child,
   });
 
   @override
@@ -32,7 +35,7 @@ class ButtonApp extends StatelessWidget {
     ),
       child: TextButton(
         onPressed: onTop  ,
-        child: Text( 
+        child: child ?? Text( 
           textData, 
           style: textStyle ?? TextStyle(color: ColorsApp.white , fontSize: 13.sp))),
           

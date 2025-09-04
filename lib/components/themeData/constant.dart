@@ -22,3 +22,5 @@ class Assets {
   static const String icons = 'assets/icons/';
   static const String animation = 'assets/animation/';
 }
+
+const String noNet=" لا يوجوداتصال";

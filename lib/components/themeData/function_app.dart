@@ -3,17 +3,19 @@
 /// وتشمل دوال للتحقق من صحة المدخلات ودوال للتعامل dengan التواريخ
 class FunctionApp {
   /// التحقق من صحة البريد الإلكتروني
-  static String validateEmail(String email) {
-    final RegExp pattern = RegExp(
-      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-    );
-    if (email.isEmpty) {
-      return 'البريد الإلكتروني لا يمكن أن يكون فارغًا.';
-    } else if (!pattern.hasMatch(email)) {
-      return 'بريد الإلكتروني غير صالح : yourname@mail.com';
-    }
-    return '';
+  static String validateEmail(String value) {
+  if (value.isEmpty) {
+    return 'البريد الإلكتروني مطلوب';
   }
+  
+  // تحقق من صيغة البريد الإلكتروني
+  final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+  if (!emailRegex.hasMatch(value)) {
+    return 'صيغة البريد الإلكتروني غير صحيحة';
+  }
+  
+  return ''; // إذا كان صحيحاً
+}
 /// التحقق من صحة كلمة المرور
   static String validatePassword(String password) {
     return password.isEmpty

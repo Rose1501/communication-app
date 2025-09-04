@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myproject/components/themeData/function_app.dart';
 import 'package:myproject/components/themeData/size_box.dart';
 import 'package:myproject/components/widget/text_filed.dart';
+import 'package:myproject/features/signup/bloc/signup_bloc.dart';
 import 'package:myproject/features/signup/view/singnup_data.dart';
 
 class SignupForm extends StatelessWidget {
@@ -10,10 +12,8 @@ class SignupForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  TextEditingController controllerName = TextEditingController();
-  TextEditingController controllerEmail = TextEditingController();
-  TextEditingController controllerPassword = TextEditingController();
     return Form(
+      key: context.read<SignUpBloc>().formKey,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
@@ -27,7 +27,7 @@ class SignupForm extends StatelessWidget {
               hintText: SingnupData.textOne,
               icon: SingnupData.idName,
               keyboardType: TextInputType.number,
-              controller:controllerName, // تأكد من تعيين controller,
+              controller: context.read<SignUpBloc>().id,
             ),
             getHeight(20),
             CustomTextFiled(
@@ -38,7 +38,7 @@ class SignupForm extends StatelessWidget {
                   },
               hintText: SingnupData.textTwo,
               icon: SingnupData.email,
-              controller:controllerEmail, // تأكد من تعيين controller,
+              controller: context.read<SignUpBloc>().email,
             ),
             getHeight(20),
             CustomTextFiled(
@@ -50,7 +50,7 @@ class SignupForm extends StatelessWidget {
               hintText: SingnupData.textThree,
               icon: SingnupData.password,
               isPassword: true,
-              controller:controllerPassword, // تأكد من تعيين controller,
+              controller: context.read<SignUpBloc>().password,
             ),
           ],
         ),
@@ -58,81 +58,3 @@ class SignupForm extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*import 'package:c/core/them/colorApp/colors_app.dart';
-import 'package:flutter/material.dart';
-
-class FormSignup extends StatefulWidget {
-  final String hintText;
-  final String icon;
-  final bool? isPassword;
-  final TextEditingController? controller;
-  const FormSignup({super.key,
-  required this.hintText, 
-    required this.icon, 
-    this.isPassword=false, 
-    this.controller});
-
-  @override
-  State<FormSignup> createState() => _FormSignupState();
-}
-
-class _FormSignupState extends State<FormSignup> {
-bool isEyes = false;
-
-  void fun() {
-    setState(() {
-      isEyes = !isEyes;
-    });
-  }
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
-    return TextFormField(
-      controller: widget.controller,
-      obscureText: widget.isPassword! && isEyes == false,
-      style: TextStyle(fontSize: 22.0),
-      textAlign: TextAlign.left,
-      decoration: InputDecoration(
-        enabledBorder: InputBorder.none,
-        contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
-        suffixIcon: Image.asset(
-          widget.icon,
-          color: ColorsApp.primaryColor,
-        ),
-        prefixIcon: widget.isPassword!
-                  ? SizedBox(
-                    width: media.width*.25,
-                    child: IconButton(
-                    onPressed: fun,
-                    iconSize: 25,
-                    color: ColorsApp.primaryColor,
-                    icon: Icon(
-                      isEyes ? Icons.visibility : Icons.visibility_off,
-                    ),
-                  ) ,
-                  )
-                  : null,
-        hintText: widget.hintText,
-        hintStyle: TextStyle(fontFamily: 'Cairo'),
-        border: InputBorder.none,
-      ),
-    );
-  }
-}*/

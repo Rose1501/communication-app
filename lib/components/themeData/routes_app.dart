@@ -7,5 +7,6 @@ class Routes {
   static const String signup = '/SignupScreen';
   static const String forgetPassword = '/ForgetPassword';
   static const String loading = '/loadingScreen';
+  static const String recoveryPassword = '/RecoveryPassword';
   static const String addAdvertisement = '/AddNewAdvertisement';
 }

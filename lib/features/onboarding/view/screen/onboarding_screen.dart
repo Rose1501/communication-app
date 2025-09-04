@@ -20,40 +20,42 @@ class OnboardingScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: ColorsApp.white,
       body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              height: media.height,
-              width: media.width,
-              decoration: primaryBorderBotomright380,
-              child: Column(
-                children: [
-                  getHeight(80),//'assets/images/csLogo_.png'
-                  CircleImage(image: LogoData.logo,size: 30,color: ColorsApp.white,),
-                  getHeight(10),
-                  const RowImageOne(),
-                  getHeight(10),
-                  const RowImageTwo(),
-                  getHeight(50),
-                  ButtonApp(
-                    textData: OnboardingData.textLogin,
-                    textStyle: font13Primary,
-                    boxDecoration: whiteBorder25,
-                    onTop: () {
-                      context.pushNamed(Routes.login);
-                    },
-                  ),
-                  getHeight(15),
-                  ButtonApp(
-                    textData: OnboardingData.textSinup,
-                    textStyle: font13Primary,
-                    boxDecoration: whiteBorder25,
-                    onTop: () {context.pushNamed(Routes.signup);},
-                  ),
-                ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: media.height,
+                width: media.width,
+                decoration: primaryBorderBotomright380,
+                child: Column(
+                  children: [
+                    getHeight(80),
+                    CircleImage(image: LogoData.logo,size: 30,color: ColorsApp.white,),
+                    getHeight(10),
+                    const RowImageOne(),
+                    getHeight(10),
+                    const RowImageTwo(),
+                    getHeight(50),
+                    ButtonApp(
+                      textData: OnboardingData.textLogin,
+                      textStyle: font13Primary,
+                      boxDecoration: whiteBorder25,
+                      onTop: () {
+                        context.pushNamed(Routes.login);
+                      },
+                    ),
+                    getHeight(15),
+                    ButtonApp(
+                      textData: OnboardingData.textSinup,
+                      textStyle: font13Primary,
+                      boxDecoration: whiteBorder25,
+                      onTop: () {context.pushNamed(Routes.signup);},
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
