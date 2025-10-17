@@ -56,7 +56,7 @@ BoxDecoration borderRadiusShadoWhite = BoxDecoration(
   ),
 );
 
-BoxDecoration BordererLinePrimary = BoxDecoration(
+BoxDecoration bordererLinePrimary = BoxDecoration(
   border: Border.all(color: ColorsApp.primaryColor),
 );
 

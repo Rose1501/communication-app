@@ -9,4 +9,8 @@ class Routes {
   static const String loading = '/loadingScreen';
   static const String recoveryPassword = '/RecoveryPassword';
   static const String addAdvertisement = '/AddNewAdvertisement';
+  static const String about = '/Info';
+  static const String displayRequest = '/DisplayRequestStudent';
+  static const String replyRequest = '/ReplyRequest';
+  static const String sendRequest = '/SendRequest';
 }

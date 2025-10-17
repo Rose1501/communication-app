@@ -1,0 +1,1 @@
+export 'advertisement_entity.dart';

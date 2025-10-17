@@ -23,27 +23,31 @@ class LoginScreen extends StatelessWidget {
         create: (context) => LoginBloc(
           userRepository: context.read<UserRepository>(),
         ),
-        child: Column(
-          children: [
-            getHeight(70),
-            Flexible(
-              child: Container(
-                decoration: whiteRaduisTopLeftRight,
-                child: Column(
-                  children: [
-                    getHeight(media.height *.03),
-                    const RowButtonLoginSignup(),
-                    CircleImage(size: 55, image: LogoData.logo,),
-                    getHeight(media.height *.09),
-                    const FormLogin(),
-                    getHeight(media.height *.06),
-                    ButtonLogin(),
-                    LoginBlocLisen(),
-                  ],
+        child: SafeArea(
+          child: Column(
+            children: [
+              getHeight(70),
+              Expanded(
+                child: Container(
+                  decoration: whiteBorder25,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        getHeight(media.height *.03),
+                        const RowButtonLoginSignup(),
+                        CircleImage(size: 55, image: LogoData.logo,),
+                        getHeight(media.height *.05),
+                        const FormLogin(),
+                        getHeight(media.height *.07),
+                        ButtonLogin(),
+                        LoginBlocLisen(),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

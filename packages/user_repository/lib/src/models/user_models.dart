@@ -5,7 +5,6 @@ class UserModels extends Equatable {
   final String userID;
   final String name;
   final String email;
-  final String password;
   final String role;
   final String gender;
   final String haveAccount;
@@ -17,7 +16,6 @@ class UserModels extends Equatable {
     required this.userID,
     required this.name,
     required this.email,
-    required this.password,
     required this.role,
     required this.gender,
     required this.haveAccount,
@@ -30,7 +28,6 @@ class UserModels extends Equatable {
     userID: '',
     name: '',
     email: '',
-    password: '',
     role: '',
     gender: '',
     haveAccount: '',
@@ -46,7 +43,6 @@ UserModels copyWith({
   String? userID,
   String? name,
   String? email,
-  String? password,
   String? role,
   String? gender,
   String? haveAccount,
@@ -58,7 +54,6 @@ UserModels copyWith({
     userID: userID ?? this.userID,
     name: name ?? this.name,
     email: email ?? this.email,
-    password: password ?? this.password,
     role: role ?? this.role,
     gender: gender ?? this.gender,
     haveAccount: haveAccount ?? this.haveAccount,
@@ -73,7 +68,6 @@ UserEntities toEntity() {
     userID: userID,
     name: name,
     email: email,
-    password: password,
     role: role,
     gender: gender,
     haveAccount: haveAccount,
@@ -87,7 +81,6 @@ static UserModels fromEntity(UserEntities entities) {
     userID: entities.userID,
     name: entities.name,
     email: entities.email,
-    password: entities.password,
     role: entities.role,
     gender: entities.gender,
     haveAccount: entities.haveAccount,
@@ -101,7 +94,6 @@ static UserModels fromEntity(UserEntities entities) {
         userID,
         name,
         email,
-        password,
         role,
         gender,
         haveAccount,

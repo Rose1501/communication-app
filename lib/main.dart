@@ -1,3 +1,4 @@
+import 'package:advertisement_repository/advertisement_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,5 +15,11 @@ void main() async{
   );
   // Ensure the app runs in portrait mode only
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(MainApp(userRepository: FirebaseUserRepository()));
+  final userRepository = FirebaseUserRepository();
+  final advertisementRepository = AdvertisementFirebaseRepository();
+  
+  runApp(MainApp(
+    userRepository: userRepository,
+    advertisementRepository: advertisementRepository,
+  ));
 }

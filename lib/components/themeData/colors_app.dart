@@ -5,6 +5,7 @@ class ColorsApp {
   static Color white = Colors.white;
   static Color scaffoldbgcolor = const Color.fromARGB(255, 255, 255, 255);
   static Color greylight = Colors.grey;
+  static Color grey = const Color.fromARGB(255, 231, 223, 223);
   static Color black = const Color.fromARGB(137, 23, 22, 22);
   static Color blackDark = const Color.fromARGB(136, 0, 0, 0);
   static Color black26 = Colors.black26;

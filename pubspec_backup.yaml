@@ -1,0 +1,62 @@
+name: myproject
+description: "A new Flutter project."
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.2
+  
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  fluentui_system_icons: ^1.1.273
+  flutter_screenutil: ^5.0.0 # أبعاد شاشات بشكل مناسب
+  cupertino_icons: ^1.0.8
+  flutter_native_splash: ^2.4.4 # native Screen Splash
+  smooth_page_indicator: ^1.0.0 # مؤشر الصفحة السلس
+  internet_connection_checker: ^3.0.1  # معرفة مستخدم تطبيق لديه انترنت او لا
+  lottie: ^3.2.0  # إضافة انيميشن
+  image_picker: ^1.1.2 # اختيار الصور من المعرض أو الكاميرا
+  cached_network_image: ^3.2.3 # تحميل الصور من الانترنت مع التخزين المؤقت
+  # Firebase
+  firebase_core: ^4.1.1
+  firebase_auth: ^6.1.0
+  uuid: ^4.5.1
+  #BLoC
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.7
+  # Custom Repository
+  user_repository:
+    path: packages/user_repository
+  advertisement_repository:
+    path: packages/advertisement_repository
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/animation/
+    - assets/icons/
+
+  fonts:
+    - family: tajawal
+      fonts:
+        - asset: assets/fonts/ElMessiri-Regular.ttf
+dependency_overrides:
+  firebase_core: ^4.0.0
+  firebase_auth: ^6.0.0
+  cloud_firestore: ^6.0.0
+ 
+ 

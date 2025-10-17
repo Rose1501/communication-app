@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ShowWidget {
-  static showMessage(
+  static void showMessage(
       BuildContext context, String message, Color color, TextStyle textStyle) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: color,
@@ -16,9 +15,4 @@ class ShowWidget {
     ));
   }
 
-  /*static showLoading(BuildContext  context){
-     showDialog(context: context, builder: (context){
-        return Center(child: CupertinoActivityIndicator(radius: 25,),);
-      });
-  }*/
 }

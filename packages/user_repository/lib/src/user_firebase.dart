@@ -11,7 +11,7 @@ class FirebaseUserRepository implements UserRepository {
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;
   final usersCollection = FirebaseFirestore.instance.collection('users');
-  final postsCollection = FirebaseFirestore.instance.collection('posts');
+  final postsCollection = FirebaseFirestore.instance.collection('advertisements');
   FirebaseUserRepository({
     FirebaseAuth? firebaseAuth,
     FirebaseFirestore? firestore,
@@ -51,7 +51,7 @@ class FirebaseUserRepository implements UserRepository {
       }
       // 3. التحقق من وجود حساب مفعل بالفعل
       final existingUserDoc = querySnapshot.docs.first;
-      final userData = existingUserDoc.data() as Map<String, dynamic>;
+      final userData = existingUserDoc.data();
       final haveAccount =
           userData['haveAccount'] is int
               ? userData['haveAccount'].toString()
@@ -69,7 +69,6 @@ class FirebaseUserRepository implements UserRepository {
       // 5. تحديث بيانات المستخدم في Firestore
       await existingUserDoc.reference.update({
         'haveAccount': '1',
-        'password': password,
         'firebaseUID': userCredential.user!.uid,
         'lastUpdated': DateTime.now(),
       });
@@ -108,7 +107,7 @@ class FirebaseUserRepository implements UserRepository {
         if (querySnapshot.docs.isNotEmpty) {
           final snapshot = querySnapshot.docs.first;
           return UserModels.fromEntity(
-            UserEntities.fromDocument(snapshot.data() as Map<String, dynamic>),
+            UserEntities.fromDocument(snapshot.data()),
           );
         } else {
           // إذا لم يتم العثور باستخدام firebaseUID، جرب البحث باستخدام البريد الإلكتروني
@@ -122,7 +121,7 @@ class FirebaseUserRepository implements UserRepository {
             final snapshot = emailQuerySnapshot.docs.first;
             return UserModels.fromEntity(
               UserEntities.fromDocument(
-                snapshot.data() as Map<String, dynamic>,
+                snapshot.data(),
               ),
             );
           } else {
@@ -173,44 +172,67 @@ class FirebaseUserRepository implements UserRepository {
     }
   }
 
-  @override
-  /// يحصل على بيانات مستخدم من Firestore
-  Future<UserModels> getUserData(String myUserId) async {
-    try {
-      return usersCollection
-          .doc(myUserId)
-          .get()
-          .then(
-            (value) =>
-                UserModels.fromEntity(UserEntities.fromDocument(value.data()!)),
-          );
-    } catch (e) {
-      log(e.toString());
-      rethrow;
-    }
-  }
 
   @override
   /// يرفع صورة المستخدم ويحولها إلى base64
-  Future<String> uploadPicture(String file, String userId) async {
+  Future<String> uploadPicture(String file, UserModels userModel) async {
     try {
+      print('✅ Uploading picture for userId: ${userModel.userID} from file: $file');
+      print('🔄 بدء رفع الصورة للمستخدم: ${userModel.userID}');
       File imageFile = File(file);
+      // تحقق من وجود الملف
+    bool fileExists = await imageFile.exists();
+    print('   📄 File exists: $fileExists');
+    
+    if (!fileExists) {
+      throw Exception('File does not exist: $file');
+    }
       List<int> imageBytes = imageFile.readAsBytesSync();
       String base64Image = base64Encode(imageBytes);
+      print('📸 حجم الصورة: ${imageBytes.length} bytes');
+      print('🔤 طول base64: ${base64Image.length}');
+      // 💾 الخطوة 3: التحقق من وجود المستخدم ثم التحديث
+    print('🔄 التحقق من وجود مستند المستخدم في Firestore...');
 
-      await usersCollection.doc(userId).update({'picture': base64Image});
-      // Update the user's picture in posts as well
-      await postsCollection.where('myUser.id', isEqualTo: userId).get().then((
-        snapshot,
-      ) {
-        for (var doc in snapshot.docs) {
-          doc.reference.update({'myUser.picture': base64Image});
-        }
-      });
+    final querySnapshot = await usersCollection.where('userID', isEqualTo: userModel.userID)
+        .get();
+
+    if (!querySnapshot.docs.isEmpty){print('⚠️ مستند المستخدم غير موجود، جاري إنشاؤه...');}
+    else {print('✅ مستند المستخدم موجود، جاري التحديث...');}
+
+       //  تحديث صورة المستخدم في مستند المستخدم في Firestore
+        print('🔄 تحديث/إنشاء مستند المستخدم في Firestore...');
+        final userDocRef = querySnapshot.docs.first.reference;
+      await userDocRef.update({'urlImg': base64Image,'lastUpdated': FieldValue.serverTimestamp()});
+      
+      print('✅ تم تحديث صورة المستخدم في Firestore');
+      // تحديث صورة المستخدم في جميع منشوراته أيضاً
+      final postsSnapshot = await postsCollection.where('user.userID', isEqualTo: userModel.userID
+      ).get();
+        // تحديث حقل الصورة في كل منشور يخص هذا المستخدم
+        print('📝 عدد المنشورات التي سيتم تحديثها: ${postsSnapshot.docs.length}');
+        if (postsSnapshot.docs.isNotEmpty) {
+      final batch = FirebaseFirestore.instance.batch();
+      
+      for (var doc in postsSnapshot.docs) {
+        batch.update(doc.reference, {
+          'user.urlImg': base64Image,
+          'lastUpdated': FieldValue.serverTimestamp()
+        });
+      }
+      
+      await batch.commit();
+      print('   ✅ All posts updated successfully');
+    } else {
+      print('   ℹ️ No posts found to update');
+    }
+        print('✅ تم تحديث صور المستخدم في جميع المنشورات');
+        
 
       return base64Image; // Return the base64 string of the image
     } catch (e) {
       log(e.toString());
+      print('❌ خطأ في رفع الصورة: $e');
       rethrow; // Rethrow the exception to be handled by the caller
     }
   }
@@ -435,6 +457,53 @@ Future<void> resetPasswordWithCode(String email, String code, String newPassword
       return 'انتهت صلاحية رمز التحقق';
     default:
       return 'حدث خطأ غير متوقع: $errorCode';
+  }
+}
+@override
+Future<void> removeProfilePicture(String userId) async {
+  try {
+    print('🗑️ بدء إزالة الصورة من البروفايل للمستخدم: $userId');
+    final querySnapshot = await usersCollection.where('userID', isEqualTo: userId).get();
+    final userDocRef = querySnapshot.docs.first.reference;
+    // تحديث المستخدم بإزالة الصورة
+    await userDocRef.update({
+      'urlImg': null,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+    
+    print('✅ تم إزالة الصورة من البروفايل بنجاح');
+  } catch (e) {
+    print('❌ خطأ في إزالة الصورة من البروفايل: $e');
+    rethrow;
+  }
+}
+
+@override
+Future<void> removePictureFromUserAdvertisements(String userId) async {
+  try {
+    print('🗑️ بدء إزالة الصورة من إعلانات المستخدم: $userId');
+    
+    // البحث عن جميع إعلانات المستخدم
+    final advertisementsSnapshot = await FirebaseFirestore.instance
+        .collection('advertisements')
+        .where('user.userID', isEqualTo: userId)
+        .get();
+
+    print('📊 عدد الإعلانات التي سيتم تحديثها: ${advertisementsSnapshot.docs.length}');
+    
+    // تحديث كل إعلان بإزالة الصورة من بيانات المستخدم
+    for (final doc in advertisementsSnapshot.docs) {
+      await doc.reference.update({
+        'user.urlImg': null,
+        'timeAdv': FieldValue.serverTimestamp(), // تحديث وقت التعديل
+      });
+      print('✅ تم تحديث الإعلان: ${doc.id}');
+    }
+    
+    print('🎉 تم إزالة الصورة من جميع إعلانات المستخدم بنجاح');
+  } catch (e) {
+    print('❌ خطأ في إزالة الصورة من الإعلانات: $e');
+    rethrow;
   }
 }
 

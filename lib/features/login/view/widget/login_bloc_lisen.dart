@@ -16,11 +16,14 @@ class LoginBlocLisen extends StatelessWidget {
         if (state is LoginSuccess) {
           ShowWidget.showMessage(
             context,
-            'Login successful',
+            'نجاح تسجيل الدخول',
             Colors.green,
             font13White,
           );
-          context.pushAndRemoveUntil(Routes.home);
+          // استخدام التنقل الآمن بعد تأكيد بناء الشجرة
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            context.pushAndRemoveUntil(Routes.home);
+          });
         } else if (state is LoginFailure) {
           ShowWidget.showMessage(
             context,

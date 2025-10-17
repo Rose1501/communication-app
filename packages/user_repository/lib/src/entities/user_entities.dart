@@ -4,7 +4,6 @@ class UserEntities extends Equatable {
   final String userID;
   final String name;
   final String email;
-  final String password;
   final String role;
   final String gender;
   final String haveAccount;
@@ -16,7 +15,6 @@ class UserEntities extends Equatable {
     required this.userID,
     required this.name,
     required this.email,
-    required this.password,
     required this.role,
     required this.gender,
     required this.haveAccount,
@@ -29,7 +27,6 @@ class UserEntities extends Equatable {
       'userID': userID,
       'name': name,
       'email': email,
-      'password': password,
       'role': role,
       'gender': gender,
       'haveAccount': haveAccount,
@@ -44,7 +41,6 @@ class UserEntities extends Equatable {
       userID: doc['userID'] as String,
       name: doc['name'] as String,
       email: doc['email'] as String,
-      password: doc['password'] as String,
       role: doc['role'] as String,
       gender: doc['gender'] as String,
       haveAccount: doc['haveAccount'] is int 
@@ -61,7 +57,6 @@ class UserEntities extends Equatable {
         userID,
         name,
         email,
-        password,
         role,
         gender,
         haveAccount,

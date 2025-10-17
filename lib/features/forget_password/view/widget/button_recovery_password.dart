@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +8,7 @@ import 'package:myproject/components/widget/bottom_app.dart';
 import 'package:myproject/features/forget_password/bloc/auth_bloc.dart';
 
 class ButtonRecoveryPassword extends StatelessWidget {
-  const ButtonRecoveryPassword({Key? key}) : super(key: key);
+  const ButtonRecoveryPassword({super.key});
 
   @override
   Widget build(BuildContext context) {

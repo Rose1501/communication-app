@@ -6,7 +6,11 @@ OutlineInputBorder outLineprimaryRaduis25 = OutlineInputBorder(
   borderSide: BorderSide(width: 1, color: ColorsApp.primaryColor),
 );
 
- OutlineInputBorder border =     OutlineInputBorder(
-  borderRadius: BorderRadius.circular(20)
-  );
+OutlineInputBorder border = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(20),
+);
 
+OutlineInputBorder bordercircularGrey = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(25),
+  borderSide: const BorderSide(color: Colors.grey),
+);

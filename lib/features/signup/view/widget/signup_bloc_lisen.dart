@@ -22,10 +22,10 @@ class SignupBlocListener extends StatelessWidget {
           );
           print('SignUpSuccess');
           
-          // تأكد من أن context صالح للتنقل
+          // استخدام التنقل الآمن بعد تأكيد بناء الشجرة
           WidgetsBinding.instance.addPostFrameCallback((_) {
-          context.pushAndRemoveUntil(Routes.home);
-            });
+            context.pushAndRemoveUntil(Routes.home);
+          });
         } else if (state is SignUpFailure) {
           ShowWidget.showMessage(
             context,
