@@ -3,6 +3,8 @@ import 'package:advertisement_repository/advertisement_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myproject/components/themeData/colors_app.dart';
+import 'package:myproject/components/themeData/connenct.dart';
+import 'package:myproject/components/themeData/constant.dart';
 import 'package:myproject/components/themeData/show_widget.dart';
 import 'package:myproject/components/themeData/size_box.dart';
 import 'package:myproject/components/themeData/text_style.dart';
@@ -143,11 +145,6 @@ class _EditAdvertisementFormState extends State<EditAdvertisementForm> {
             vertical: 12,
           ),
         ),
-        // 🔥 إزالة الـ validator الإلزامي
-        validator: (value) {
-          // لا يوجد تحقق إلزامي - الوصف اختياري
-          return null;
-        },
       ),
     ],
   );
@@ -211,6 +208,10 @@ Widget _buildCustomSection() {
 
 // دالة تقديم النموذج وتعديل الإعلان
   void _submitForm() async {
+    final isConnected = await checkInternetconnection();
+    if (!isConnected) {
+      ShowWidget.showMessage(context, noNet, Colors.black, font11White); 
+    }
     if (_formKey.currentState!.validate()) {
       _setLoading(true);
       try {
@@ -248,7 +249,6 @@ Widget _buildCustomSection() {
         // 🔥 الحالة 3: التحديث العادي (بدون تغيير الصورة أو بإضافة صورة جديدة)
         final updatedAdvertisement = widget.advertisement.copyWith(
           description: _descriptionController.text,
-          timeAdv: DateTime.now(),
           custom: selectedcustom, 
           advlImg: newImageUrl ?? widget.advertisement.advlImg, 
         );

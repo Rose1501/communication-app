@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myproject/components/themeData/routes_app.dart';
 import 'package:myproject/components/widget/infoAPP.dart';
+import 'package:myproject/features/complaints/view/screens/complaints_list_screen.dart';
 import 'package:myproject/features/forget_password/view/screen/forget_password.dart';
 import 'package:myproject/features/forget_password/view/screen/recovery_password.dart';
 import 'package:myproject/features/home/view/screen/home_screen.dart';
@@ -65,6 +66,9 @@ class AppRouter {
 
       case Routes.sendRequest:
         return MaterialPageRoute(builder: (_) => const SendRequest(),);
+
+      case Routes.complaintsList:
+        return MaterialPageRoute( builder: (_) => const ComplaintsListScreen(),);
 
 
 

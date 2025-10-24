@@ -46,18 +46,73 @@ class _AdminReplyDialogState extends State<AdminReplyDialog> {
 
   void _submitReply() {
     final replyText = _replyController.text.trim();
-    
+
     // 🔥 إخفاء الكيبورد أولاً
     _replyFocusNode.unfocus();
     
     // 🔥 تأخير الإغلاق قليلاً لضمان إخفاء الكيبورد
     Future.delayed(const Duration(milliseconds: 200), () {
       if (mounted) {
-        widget.onReplySubmitted(_selectedStatus, replyText);
-        Navigator.pop(context);
+        final bool shouldDeleteReply = widget.existingReply != null && widget.existingReply!.isNotEmpty && replyText.isEmpty;
+        // 🎯 تحديد نص الزر بناءً على الإجراء
+      String actionMessage;
+      if (shouldDeleteReply) {
+        actionMessage = 'حذف الرد';
+      } else if (widget.existingReply != null) {
+        actionMessage = replyText.isEmpty ? 'حذف الرد' : 'تحديث الرد';
+      } else {
+        actionMessage = 'إرسال الرد';
+      }
+      
+      // 🔥 إظهار تأكيد إذا كان هناك حذف
+      if (shouldDeleteReply) {
+        _showDeleteConfirmation(actionMessage);
+      } else {
+        _proceedWithSubmission(replyText, actionMessage);
+      }
       }
     });
   }
+
+  /// 🎯 المتابعة في إرسال البيانات
+void _proceedWithSubmission(String replyText, String actionMessage) {
+  widget.onReplySubmitted(_selectedStatus, replyText);
+  Navigator.pop(context);
+  
+  // 💫 إظهار رسالة تأكيد
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text('تم $actionMessage بنجاح'),
+      backgroundColor: Colors.green,
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
+/// 🗑️ عرض تأكيد الحذف
+void _showDeleteConfirmation(String actionMessage) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('تأكيد الحذف'),
+      content: const Text('هل أنت متأكد من حذف الرد؟ لا يمكن التراجع عن هذا الإجراء.'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('إلغاء'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context); // إغلاق حوار التأكيد
+            _proceedWithSubmission('', actionMessage); // المتابعة بالحذف
+          },
+          style: TextButton.styleFrom(foregroundColor: Colors.red),
+          child: const Text('حذف'),
+        ),
+      ],
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -188,6 +243,14 @@ class _AdminReplyDialogState extends State<AdminReplyDialog> {
                 border:const OutlineInputBorder(),
                 alignLabelWithHint: true,
                 contentPadding:const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                // 🔄 إضافة زر حذف إذا كان هناك رد سابق
+                suffixIcon: widget.existingReply != null && widget.existingReply!.isNotEmpty
+                  ? IconButton(
+                  icon: const Icon(Icons.delete_outline, color: Colors.red),
+                  onPressed: _clearReply,
+                  tooltip: 'حذف الرد السابق',
+                  )
+                : null,
               ),
             ),
             const SizedBox(height: 16),
@@ -207,10 +270,10 @@ class _AdminReplyDialogState extends State<AdminReplyDialog> {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'يوجد رد سابق. يمكنك تعديله أو ترك الحقل فارغاً لحذف الرد.',
+                          '• تعديل النص للحفظ\n• استخدام زر الحذف 🗑️\n• ترك الحقل فارغاً للحذف',
                           style: TextStyle(
                             color: Colors.blue[700],
-                            fontSize: 12,
+                            fontSize: 11,
                           ),
                         ),
                       ),
@@ -255,6 +318,13 @@ class _AdminReplyDialogState extends State<AdminReplyDialog> {
       ),
     ),
   );
+}
+
+/// 🗑️ مسح الرد السابق
+void _clearReply() {
+  setState(() {
+    _replyController.clear();
+  });
 }
 
   @override

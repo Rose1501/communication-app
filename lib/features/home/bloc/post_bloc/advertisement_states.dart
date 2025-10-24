@@ -69,3 +69,13 @@ class AdvertisementImageRemoved extends AdvertisementState {
   final String advertisementId;
   AdvertisementImageRemoved({required this.advertisementId});
 }
+
+// حالة نجاح إعادة النشر
+class AdvertisementRepublished extends AdvertisementState {
+  final AdvertisementModel advertisement;
+
+  const AdvertisementRepublished({required this.advertisement});
+
+  @override
+  List<Object> get props => [advertisement];
+}

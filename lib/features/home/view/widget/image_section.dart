@@ -114,15 +114,16 @@ class ImageSection extends StatelessWidget {
             )
           : ElevatedButton.icon(
               icon: Icon(icon, size: 20),
-              label: Text(text, style: font14black),
+              label: Text(text, style: TextStyle(color: color,fontSize: 15)),
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
-                backgroundColor: color,
-                foregroundColor: Colors.white,
+                //backgroundColor: color,
+                foregroundColor: color,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 12),
+                side: BorderSide(color: color),
               ),
             ),
     );

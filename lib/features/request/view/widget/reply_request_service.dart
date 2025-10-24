@@ -55,26 +55,34 @@ class ReplyRequestService {
       return;
     }
     try {
+      final bool shouldDeleteReply = adminReply.isEmpty;
       scaffoldContext.read<RequestBloc>().add(
-        UpdateRequestStatusEvent(requestId, newStatus, adminReply: adminReply.isNotEmpty ? adminReply : null),
+        UpdateRequestStatusEvent(requestId, newStatus, 
+            adminReply: adminReply,
+            ),
       );
 
       String message = '';
+      Color messageColor = Colors.green;
       if (isEditing) {
-        message = adminReply.isNotEmpty 
-            ? 'تم تحديث رد الطالب بنجاح'
-            : 'تم حذف رد الطالب بنجاح';
+      if (shouldDeleteReply) {
+        message = 'تم حذف رد الطالب بنجاح';
+        messageColor = Colors.orange;
       } else {
-        message = 'تم ${newStatus == 'موافقة' ? 'الموافقة' : 'الرفض'} على الطلب';
-        if (adminReply.isNotEmpty) {
-          message += ' وإرسال الرد للطالب';
-        }
+        message = 'تم تحديث رد الطالب بنجاح';
       }
+    } else {
+      message = 'تم ${newStatus == 'موافقة' ? 'الموافقة' : 'الرفض'} على الطلب';
+      if (adminReply.isNotEmpty) {
+        message += ' وإرسال الرد للطالب';
+      }
+      messageColor = newStatus == 'موافقة' ? Colors.green : Colors.red;
+    }
 
       ShowWidget.showMessage(
         scaffoldContext,
         message,
-        newStatus == 'موافقة' ? Colors.green : Colors.red,
+        messageColor,
         const TextStyle(color: Colors.white, fontSize: 13),
       );
     } catch (e) {

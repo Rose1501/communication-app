@@ -105,11 +105,9 @@ class FirebaseRequestRepository implements RequestRepository {
       'status': status,
       'dateTime': DateTime.now(),
     };
-
-    if (adminReply != null) {
+    
       updateData['adminReply'] = adminReply;
-    }
-
+      
     await requestsCollection.doc(requestId).update(updateData);
 
 
@@ -159,6 +157,12 @@ Future<void> deleteAllRequests() async {
     }
 
     await batch.commit();
+
+    // إضافة مستند فارغ لضمان بقاء المجموعة
+    await requestsCollection.doc('placeholder').set({
+      'type': 'placeholder',
+      'createdAt': FieldValue.serverTimestamp()
+    });
 
     print('✅ تم حذف جميع الطلبات بنجاح');
     print('📊 عدد الطلبات المحذوفة: ${querySnapshot.docs.length}');

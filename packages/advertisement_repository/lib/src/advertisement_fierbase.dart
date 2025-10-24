@@ -5,6 +5,7 @@ import 'package:advertisement_repository/advertisement_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart'as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:user_repository/user_repository.dart';
 import 'package:uuid/uuid.dart';
 
 class AdvertisementFirebaseRepository implements AdvertisementRepository {
@@ -153,6 +154,68 @@ class AdvertisementFirebaseRepository implements AdvertisementRepository {
       rethrow;
     }
   }
+
+  // 🔥 دالة مخصصة لإعادة نشر الإعلان
+@override
+Future<AdvertisementModel> republishAdvertisement({
+  required AdvertisementModel originalAdvertisement,
+  required String newDescription,
+  required String newCustom,
+  required UserModels currentUser,
+  File? newImage,
+  bool removeImage = false,
+}) async {
+  try {
+    print('🔄 بدء إعادة نشر الإعلان...');
+    final newAdId = const Uuid().v4();
+
+    // 🔥 معالجة الصورة بشكل صحيح
+    String? finalImageUrl;
+
+    if (removeImage) {
+      // الحالة 1: إعادة النشر بدون صورة
+      finalImageUrl = null;
+      print('🔄 إعادة النشر بدون صورة');
+    } else if (newImage != null) {
+      // الحالة 2: رفع صورة جديدة
+      print('📸 جاري رفع الصورة الجديدة...');
+      final imageBytes = await newImage.readAsBytes();
+      finalImageUrl = base64Encode(imageBytes);
+      print('✅ تم تحويل الصورة الجديدة إلى base64');
+    } else {
+      // الحالة 3: استخدام الصورة الأصلية
+      finalImageUrl = originalAdvertisement.advlImg;
+      print('🔄 استخدام الصورة الأصلية');
+    }
+
+    // إنشاء الإعلان الجديد
+    final newAdvertisement = AdvertisementModel(
+      id: newAdId,
+      description: newDescription,
+      custom: newCustom,
+      user: currentUser,
+      advlImg: finalImageUrl,
+      timeAdv: DateTime.now(),
+    );
+
+    print('🆕 إنشاء إعلان جديد:');
+    print('   - ID: $newAdId');
+    print('   - الوصف: $newDescription');
+    print('   - الفئة: $newCustom');
+    print('   - الصورة: ${finalImageUrl != null ? "موجودة" : "بدون صورة"}');
+    print('   - الناشر: ${currentUser.name}');
+
+    // حفظ الإعلان الجديد في Firestore
+    await advcollection.doc(newAdId).set(newAdvertisement.toEntity().toDocument());
+    
+    print('✅ تم إعادة نشر الإعلان بنجاح');
+    return newAdvertisement;
+
+  } catch (e) {
+    print('❌ فشل في إعادة نشر الإعلان: $e');
+    rethrow;
+  }
+}
 
   // 🔥 الدالة الجديدة لإزالة صورة الإعلان (تعيينها إلى null)
 @override

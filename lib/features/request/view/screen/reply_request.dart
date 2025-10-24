@@ -4,7 +4,7 @@ import 'package:myproject/components/themeData/colors_app.dart';
 import 'package:myproject/components/widget/onlyTitleAppBar.dart';
 import 'package:myproject/features/home/view/widget/bottom_navigation_bar.dart';
 import 'package:myproject/features/request/bloc/request_bloc.dart';
-import 'package:myproject/features/request/view/widget/date_range_picker.dart';
+import 'package:myproject/components/widget/date_range_picker.dart';
 import 'package:myproject/features/request/view/widget/reply_request_service.dart';
 import 'package:myproject/features/request/view/widget/reply_request_widgets.dart';
 import 'package:myproject/features/request/view/widget/request_filter_utils.dart';
@@ -89,9 +89,6 @@ class _ReplyRequestState extends State<ReplyRequest> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBarTitle(title: 'رد على الطلبات'),
-      // 🔥 إضافة الزر العائم
-      floatingActionButton: _buildFloatingActionButton(context),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       body: BlocBuilder<RequestBloc, RequestState>(
         builder: (context, state) {
           return _buildBody(context, state);
@@ -102,24 +99,6 @@ class _ReplyRequestState extends State<ReplyRequest> {
         onTap: _onItemTapped,
         userRole: getUserRole(context),
       ),
-    );
-  }
-
-  // 🔥 بناء الزر العائم
-  Widget _buildFloatingActionButton(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        // زر حذف الكل
-        FloatingActionButton(
-          onPressed: () => ReplyRequestService.deleteAllRequests(context),
-          backgroundColor: Colors.red,
-          foregroundColor: Colors.white,
-          heroTag: 'delete_all',
-          tooltip: 'حذف جميع الطلبات',
-          child: const Icon(Icons.delete_forever),
-        ),
-      ],
     );
   }
 

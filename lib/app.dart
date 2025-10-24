@@ -1,7 +1,9 @@
+import 'package:complaint_repository/complaint_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myproject/app_router.dart';
 import 'package:myproject/app_view.dart';
+import 'package:myproject/features/complaints/bloc/complaint_bloc.dart';
 import 'package:myproject/features/forget_password/bloc/auth_bloc.dart';
 import 'package:myproject/features/home/bloc/my_user_bloc/my_user_bloc.dart';
 import 'package:myproject/features/home/bloc/post_bloc/advertisement_bloc.dart';
@@ -30,6 +32,7 @@ class MainApp extends StatelessWidget {
         RepositoryProvider.value(value: userRepository),
         RepositoryProvider.value(value: advertisementRepository),
         RepositoryProvider.value(value: FirebaseRequestRepository),
+        RepositoryProvider.value(value: FirebaseComplaintRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -64,6 +67,11 @@ class MainApp extends StatelessWidget {
           BlocProvider( 
             create: (context) => RequestBloc(
               requestRepository: FirebaseRequestRepository(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => ComplaintBloc(
+              complaintRepository: FirebaseComplaintRepository(),
             ),
           ),
         ],

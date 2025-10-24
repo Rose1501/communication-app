@@ -13,6 +13,7 @@ class PublisherInfoBar extends StatelessWidget {
   final AdvertisementModel adv;
   final Function()? onEdit; // دالة التعديل
   final Function()? onDelete; // دالة الحذف
+  final Function()? onRepublish; //دالة اعادة النشر
   final bool showDepartmentInfo;
 
   const PublisherInfoBar({
@@ -21,6 +22,7 @@ class PublisherInfoBar extends StatelessWidget {
     required this.adv,
     this.onEdit,
     this.onDelete, 
+    this.onRepublish,
     required this.showDepartmentInfo,
   });
 
@@ -40,27 +42,22 @@ class PublisherInfoBar extends StatelessWidget {
             _buildUserAvatar(user),
             getWidth(10),
             Text(userModel.name, style: black12W600),
-       //   const Spacer(),
-            getWidth(8),
-            _buildAdvertisementTypeIcon(adv.custom),
-            getWidth(20),
+            const Spacer(),
             
-            // الصف الثاني: أيقونة النشر والتاريخ
-            Row(
-              children: [
-                const Icon(Icons.access_time, size: 14, color: Colors.grey),
-                getWidth(2),
-                Text(
-                  _formatDate(adv.timeAdv),
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-                
-              ],
-            ),
           if(showDepartmentInfo)
-            // أزرار التعديل والحذف 
+            // أزرار التعديل والحذف و إعادة النشر
               Row(
                 children: [
+                  if (onRepublish != null)
+                    IconButton(
+                      icon: const Icon(
+                        Icons.replay,
+                        size: 16,
+                        color: Colors.blue,
+                      ),
+                      onPressed: onRepublish,
+                      tooltip: 'إعادة نشر الإعلان',
+                    ),
                   IconButton(
                     icon: const Icon(
                       Icons.edit,
@@ -68,6 +65,7 @@ class PublisherInfoBar extends StatelessWidget {
                       color: Colors.grey,
                     ),
                     onPressed: onEdit,
+                    tooltip: 'تعديل الإعلان',
                   ),
                   IconButton(
                     icon: const Icon(
@@ -76,11 +74,26 @@ class PublisherInfoBar extends StatelessWidget {
                       color: Colors.red,
                     ),
                     onPressed: onDelete,
+                    tooltip: 'حذف الإعلان',
                   ),
                 ],
               ), 
           ],
         ),
+            // الصف الثاني: أيقونة النشر والتاريخ
+            Row(
+              children: [
+                getWidth(15),
+                const Icon(Icons.access_time, size: 14, color: Colors.grey),
+                getWidth(2),
+                Text(
+                  _formatDate(adv.timeAdv),
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                getWidth(8),
+            _buildAdvertisementTypeIcon(adv.custom),
+              ],
+            ),
       ],
     );
   }

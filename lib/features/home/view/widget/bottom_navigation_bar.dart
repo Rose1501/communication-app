@@ -64,12 +64,16 @@ class CustomBottomNavigationBar extends StatelessWidget {
           label: 'الرئيسية',
         ),
         const BottomNavigationBarItem(
-          icon: Icon(Icons.assignment),
+          icon: Icon(Icons.group),
           label: 'المقررات',
         ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.notifications),
           label: 'الإشعارات',
+        ),
+        const BottomNavigationBarItem(
+        icon: Icon(Icons.forum_outlined),
+        label: 'التواصل',
         ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.description),
@@ -83,12 +87,16 @@ class CustomBottomNavigationBar extends StatelessWidget {
           label: 'الرئيسية',
         ),
         const BottomNavigationBarItem(
-          icon: Icon(Icons.assignment),
+          icon: Icon(Icons.group),
           label: 'المقررات',
         ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.notifications),
           label: 'الإشعارات',
+        ),
+        const BottomNavigationBarItem(
+        icon: Icon(Icons.forum_outlined),
+        label: 'التواصل',
         ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.description),
@@ -102,7 +110,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           label: 'الرئيسية',
         ),
         const BottomNavigationBarItem(
-          icon: Icon(Icons.assignment),
+          icon: Icon(Icons.group),
           label: 'المقررات',
         ),
         const BottomNavigationBarItem(
@@ -126,8 +134,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
           label: 'الرئيسية',
         ),
         const BottomNavigationBarItem(
-          icon: Icon(Icons.assignment),
-          label: 'مقرراتي',
+        icon: Icon(Icons.forum_outlined),
+        label: 'التواصل',
         ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.person),
@@ -154,15 +162,17 @@ void navigateToScreen(int index, String userRole, BuildContext context) {
         break;
       case 1:
         // صفحة إدارة المستخدمين
-        
+        break;
       case 2:
         // صفحة الطلبات
         break;
       case 3:
         // الطلبات
         context.pushAndRemoveUntil(Routes.replyRequest);
+        break;
       case 4:
         //الشكاوي
+        context.pushAndRemoveUntil(Routes.complaintsList);
         break;
     }
   } else if (userRole == 'Manager') {
@@ -177,8 +187,10 @@ void navigateToScreen(int index, String userRole, BuildContext context) {
         // صفحة الإشعارات
         break;
       case 3:
-        //الشكاوي
+        break;
       case 4:
+      //الشكاوي
+        context.pushAndRemoveUntil(Routes.complaintsList);
         break;
     }
   }else if (userRole == 'Doctor') {
@@ -194,9 +206,10 @@ void navigateToScreen(int index, String userRole, BuildContext context) {
         // صفحة الإشعارات
         break;
       case 3:
-        //الشكاوي
+        break;
       case 4:
-        
+        //الشكاوي
+        context.pushAndRemoveUntil(Routes.complaintsList);
         break;
     }
   }else if (userRole == 'Student') {
@@ -206,7 +219,6 @@ void navigateToScreen(int index, String userRole, BuildContext context) {
         break;
       case 1:
         // صفحة المقررات
-        
         break;
       case 2:
         // صفحة الإشعارات
@@ -214,8 +226,10 @@ void navigateToScreen(int index, String userRole, BuildContext context) {
       case 3:
         // الطلبات
         context.pushAndRemoveUntil(Routes.displayRequest);
+        break;
       case 4:
         //الشكاوي
+        context.pushAndRemoveUntil(Routes.complaintsList);
         break;
     }
   } else {
@@ -231,7 +245,7 @@ void navigateToScreen(int index, String userRole, BuildContext context) {
         // صفحة الملف الشخصي
         break;
       case 3:
-        
+        break;
     }
   }
 }

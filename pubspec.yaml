@@ -23,6 +23,7 @@ dependencies:
   image_picker: ^1.1.2 # اختيار الصور من المعرض أو الكاميرا
   cached_network_image: ^3.2.3 # تحميل الصور من الانترنت مع التخزين المؤقت
   table_calendar: ^3.0.9 #مكتبة التقويم
+  readmore: ^2.1.0
   # Firebase
   firebase_core: ^4.1.1
   firebase_auth: ^6.1.0
@@ -37,6 +38,8 @@ dependencies:
     path: packages/advertisement_repository
   request_repository:
     path: packages/request_repository
+  complaint_repository:
+    path: packages/complaint_repository
   file_picker: ^10.3.3
 
 dev_dependencies:

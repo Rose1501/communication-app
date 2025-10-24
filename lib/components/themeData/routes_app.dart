@@ -13,4 +13,5 @@ class Routes {
   static const String displayRequest = '/DisplayRequestStudent';
   static const String replyRequest = '/ReplyRequest';
   static const String sendRequest = '/SendRequest';
+  static const String complaintsList ='/ComplaintsListScreen';
 }

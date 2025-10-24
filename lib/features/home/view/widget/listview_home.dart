@@ -10,6 +10,7 @@ import 'package:myproject/features/home/bloc/post_bloc/advertisement_bloc.dart';
 import 'package:myproject/features/home/view/home_data.dart';
 import 'package:myproject/features/home/view/widget/card_home.dart';
 import 'package:myproject/features/home/view/widget/edit_advertisement_form.dart';
+import 'package:myproject/features/home/view/widget/republish_advertisement_dialog.dart';
 import 'package:user_repository/user_repository.dart';
 // قائمة عرض الإعلانات الرئيسية
 class ListViewHome extends StatelessWidget {
@@ -157,9 +158,25 @@ List<AdvertisementModel> _filterAdvertisements(
       adv: adv,
       onEdit: () => _showEditDialog(context, adv),
       onDelete: () => _showDeleteConfirmation(context, adv.id),
+      onRepublish: () => _showRepublishDialog(context, adv),
       showDepartmentInfo: _shouldShowTargetingInfo(adv, userModel),
     );
   }
+
+  // عرض نافذة إعادة النشر
+  void _showRepublishDialog(BuildContext context, AdvertisementModel advertisement) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return RepublishAdvertisementDialog(
+          advertisement: advertisement,
+          currentUser: userModel,
+        );
+      },
+    );
+  }
+}
+
 // 🔧 التحقق إذا كان يجب عرض أزرار التعديل والحذف
   bool _shouldShowTargetingInfo(AdvertisementModel adv, UserModels currentUser) {
     // عرض للمديرين والإداريين أو لناشر الإعلان
@@ -239,11 +256,10 @@ List<AdvertisementModel> _filterAdvertisements(
               maxHeight: MediaQuery.of(context).size.height * 0.7,
               maxWidth: 500.w,
             ),
-            child: EditAdvertisementForm(advertisement: advertisement,currentUser: userModel,),
+            child: EditAdvertisementForm(advertisement: advertisement,currentUser:advertisement.user,),
           ),
         ),
         );
       },
     );
   }
-}

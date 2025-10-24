@@ -1,9 +1,11 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:async';
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:advertisement_repository/advertisement_repository.dart';
+import 'package:user_repository/user_repository.dart';
 
 part 'advertisement_events.dart';
 part 'advertisement_states.dart';
@@ -21,6 +23,7 @@ class AdvertisementBloc extends Bloc<AdvertisementEvent, AdvertisementState> {
     on<DeleteAdvertisementEvent>(_onDeleteAdvertisement);
     on<RefreshAdvertisementsEvent>(_onRefreshAdvertisements);
     on<RemoveAdvertisementImageEvent>(_onRemoveAdvertisementImage);
+    on<RepublishAdvertisementEvent>(_onRepublishAdvertisement);
   }
 
   // معالجة حدث تحميل الإعلانات
@@ -157,6 +160,36 @@ Future<void> _onUpdateAdvertisement(
       } catch (_) {
         emit(AdvertisementError(message: 'فشل في إزالة الصورة: ${e.toString()}'));
       }
+    }
+  }
+
+  // معالجة حدث إعادة نشر الإعلان
+  Future<void> _onRepublishAdvertisement(
+    RepublishAdvertisementEvent event,
+    Emitter<AdvertisementState> emit,
+  ) async {
+    try {
+      emit(AdvertisementLoading());
+      
+      await advertisementRepository.republishAdvertisement(
+      originalAdvertisement: event.originalAdvertisement,
+      newDescription: event.newDescription,
+      newCustom: event.newCustom,
+      currentUser: event.currentUser,
+      newImage: event.newImage,
+      removeImage: event.removeImage,
+    );
+
+    // إعادة تحميل الإعلانات بعد النجاح
+    final advertisements = await advertisementRepository.getAdvertisements();
+    
+    emit(AdvertisementLoaded(advertisements: advertisements));
+    
+    
+    print('✅ تم إعادة النشر وإعادة التحميل بنجاح');
+
+    } catch (e) {
+      emit(AdvertisementError(message: 'فشل في إعادة نشر الإعلان: ${e.toString()}'));
     }
   }
 

@@ -6,12 +6,14 @@ class ActionButtons extends StatelessWidget {
   final bool isLoading;
   final VoidCallback onCancel;
   final VoidCallback onSave;
+  final String saveText;
 
   const ActionButtons({
     super.key,
     required this.isLoading,
     required this.onCancel,
     required this.onSave,
+    this.saveText = 'حفظ', // قيمة افتراضية
   });
 
   @override
@@ -75,8 +77,8 @@ class ActionButtons extends StatelessWidget {
                     valueColor: AlwaysStoppedAnimation(Colors.white),
                   ),
                 )
-              : const Text(
-                  'حفظ',
+              : Text(
+                  saveText,
                   style: TextStyle(fontSize: 16),
                 ),
         ),

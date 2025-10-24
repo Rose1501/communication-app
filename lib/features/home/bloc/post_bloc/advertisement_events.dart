@@ -55,3 +55,31 @@ class RemoveAdvertisementImageEvent extends AdvertisementEvent {
   final String advertisementId;
   RemoveAdvertisementImageEvent({required this.advertisementId});
 }
+
+// حدث إعادة نشر الإعلان
+class RepublishAdvertisementEvent extends AdvertisementEvent {
+  final AdvertisementModel originalAdvertisement;
+  final String newDescription;
+  final String newCustom;
+  final UserModels currentUser;
+  final File? newImage;
+  final bool removeImage;
+
+  const RepublishAdvertisementEvent({
+    required this.originalAdvertisement,
+    required this.newDescription,
+    required this.newCustom,
+    required this.currentUser,
+    this.newImage,
+    this.removeImage = false,
+  });
+
+  @override
+  List<Object> get props => [
+    originalAdvertisement,
+    newDescription,
+    newCustom,
+    currentUser,
+    removeImage,
+    ];
+}

@@ -100,7 +100,18 @@ List<StudentRequestModel> _removeDuplicateRequests(List<StudentRequestModel> req
     Emitter<RequestState> emit,
   ) async {
     try {
-      await _requestRepository.updateRequestStatus(event.requestId, event.status,adminReply: event.adminReply,);
+      print('🔄 تحديث حالة الطلب في الـ BLoC:');
+    print('   - الطلب: ${event.requestId}');
+    print('   - الحالة: ${event.status}');
+    print('   - الرد المستلم: "${event.adminReply}"');
+    print('   - طول الرد: ${event.adminReply?.length ?? "NULL"}');
+    print('   - نوع الرد: ${event.adminReply.runtimeType}');
+      await _requestRepository.updateRequestStatus(event.requestId,
+        event.status,
+        adminReply: event.adminReply != null && event.adminReply!.isEmpty 
+          ? null 
+          : event.adminReply,
+        );
       // إعادة تحميل الطلبات بعد التحديث
         add(LoadAllRequestsEvent());
     } catch (e) {
