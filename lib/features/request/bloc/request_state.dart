@@ -4,7 +4,7 @@ abstract class RequestState extends Equatable {
   const RequestState();
 
   @override
-  List<Object> get props => [];
+  List<Object> props() => [];
 }
 
 class RequestInitial extends RequestState {}
@@ -18,7 +18,7 @@ class RequestFailure extends RequestState {
   const RequestFailure({required this.error});
 
   @override
-  List<Object> get props => [error];
+  List<Object> props() => [error];
 }
 
 class StudentRequestsLoaded extends RequestState {
@@ -26,7 +26,7 @@ class StudentRequestsLoaded extends RequestState {
   const StudentRequestsLoaded({required this.requests});
 
   @override
-  List<Object> get props => [requests];
+  List<Object> props() => [requests];
 }
 
 class AllRequestsLoaded extends RequestState {
@@ -34,5 +34,5 @@ class AllRequestsLoaded extends RequestState {
   const AllRequestsLoaded({required this.requests});
 
   @override
-  List<Object> get props => [requests];
+  List<Object> props() => [requests];
 }

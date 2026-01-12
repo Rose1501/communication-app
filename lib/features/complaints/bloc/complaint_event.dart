@@ -4,7 +4,7 @@ abstract class ComplaintEvent extends Equatable {
   const ComplaintEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object> props() => [];
 }
 
 class SendComplaintEvent extends ComplaintEvent {
@@ -12,7 +12,7 @@ class SendComplaintEvent extends ComplaintEvent {
   const SendComplaintEvent(this.complaint);
 
   @override
-  List<Object> get props => [complaint];
+  List<Object> props() => [complaint];
 }
 
 class LoadStudentComplaintsEvent extends ComplaintEvent {
@@ -20,7 +20,7 @@ class LoadStudentComplaintsEvent extends ComplaintEvent {
   const LoadStudentComplaintsEvent(this.studentID);
 
   @override
-  List<Object> get props => [studentID];
+  List<Object> props() => [studentID];
 }
 
 class LoadRoleComplaintsEvent extends ComplaintEvent {
@@ -28,7 +28,7 @@ class LoadRoleComplaintsEvent extends ComplaintEvent {
   const LoadRoleComplaintsEvent(this.targetRole);
 
   @override
-  List<Object> get props => [targetRole];
+  List<Object> props() => [targetRole];
 }
 
 class UpdateComplaintStatusEvent extends ComplaintEvent {
@@ -45,7 +45,7 @@ class UpdateComplaintStatusEvent extends ComplaintEvent {
   });
 
   @override
-  List<Object> get props => [complaintId, status];
+  List<Object> props() => [complaintId, status];
 }
 
 class DeleteComplaintEvent extends ComplaintEvent {
@@ -53,5 +53,5 @@ class DeleteComplaintEvent extends ComplaintEvent {
   const DeleteComplaintEvent(this.complaintId);
 
   @override
-  List<Object> get props => [complaintId];
+  List<Object> props() => [complaintId];
 }

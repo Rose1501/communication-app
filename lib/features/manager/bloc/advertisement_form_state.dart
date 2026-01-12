@@ -4,7 +4,7 @@ abstract class AdvertisementFormState extends Equatable {
   const AdvertisementFormState();
 
   @override
-  List<Object> get props => [];
+  List<Object> props() => [];
 }
 
 class AdvertisementFormInitial extends AdvertisementFormState {}
@@ -67,7 +67,7 @@ class AdvertisementFormData extends AdvertisementFormState {
   }
 
   @override
-  List<Object> get props => [
+  List<Object> props() => [
         description,
         custom,
         image ?? '',
@@ -90,5 +90,5 @@ class AdvertisementFormFailure extends AdvertisementFormState {
   const AdvertisementFormFailure(this.error);
 
   @override
-  List<Object> get props => [error];
+  List<Object> props() => [error];
 }

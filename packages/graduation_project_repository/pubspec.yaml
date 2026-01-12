@@ -1,0 +1,24 @@
+name: graduation_project_repository
+description: Dart package which manages the graduation projects system.
+publish_to: "none"
+version: 1.0.0
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  uuid: ^4.5.1
+  cloud_firestore: ^6.0.0
+  equatable: ^2.0.7
+  user_repository:
+    path: ../user_repository # لاستخدام UserModels
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

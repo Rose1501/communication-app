@@ -1,9 +1,15 @@
 ﻿import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:notification_repository/notification_repository.dart';
 import 'package:request_repository/request_repository.dart';
 
 class FirebaseRequestRepository implements RequestRepository {
   final CollectionReference requestsCollection =
       FirebaseFirestore.instance.collection('Request');
+
+      final NotificationsRepository? _notificationsRepository;
+      // Constructor مع dependency injection
+  FirebaseRequestRepository({NotificationsRepository? notificationsRepository})
+      : _notificationsRepository = notificationsRepository;
 
   StudentRequestModel _documentToRequest(DocumentSnapshot doc) {
     try {
@@ -36,6 +42,18 @@ class FirebaseRequestRepository implements RequestRepository {
       );
 
       await requestsCollection.doc(docRef.id).set(docRef.toEntity().toDocument());
+      print(' هل الاشعارات موجودة ${_notificationsRepository}');
+
+      // 🔥 إرسال إشعار إذا كان notificationsRepository موجود
+      if (_notificationsRepository != null) {
+        try {
+          await _notificationsRepository.saveRequestNotification(docRef);
+          print('📨 تم إرسال إشعار الطلب');
+        } catch (e) {
+          print('⚠️ خطأ في إرسال إشعار الطلب: $e');
+          // لا نعيد الخطأ هنا لأن حفظ الطلب ناجح
+        }
+      }
 
       print('💾 تم حفظ الطلب في Firestore بنجاح');
       print('🆕 معرّف الطلب: ${docRef.id}');
@@ -93,13 +111,6 @@ class FirebaseRequestRepository implements RequestRepository {
       print('💬 رد الإدمن: $adminReply');
     }
 
-      // التحقق من وجود الطلب أولاً
-      final requestDoc = await requestsCollection.doc(requestId).get();
-
-      if (!requestDoc.exists) {
-        throw Exception('الطلب غير موجود: $requestId');
-      }
-
       // تحديث حالة الطلب في Firestore
       final updateData = <String, dynamic>{
       'status': status,
@@ -110,6 +121,21 @@ class FirebaseRequestRepository implements RequestRepository {
       
     await requestsCollection.doc(requestId).update(updateData);
 
+    // الحصول على الطلب المحدث
+      final updatedDoc = await requestsCollection.doc(requestId).get();
+      final updatedRequest = _documentToRequest(updatedDoc);
+
+       // 🔥 إرسال إشعار رد إذا كان notificationsRepository موجود
+      if (_notificationsRepository != null) {
+        try {
+          await _notificationsRepository.saveRequestReplyNotification(updatedRequest,adminReply: adminReply,);
+          print('📨 تم إرسال إشعار الرد');
+        } catch (e) {
+          print('⚠️ خطأ في إرسال إشعار الرد: $e');
+          // لا نعيد الخطأ هنا لأن تحديث الطلب ناجح
+        }
+      }
+      print(' هل الاشعارات موجودة ${_notificationsRepository}');
 
       print('✅ تم تحديث حالة الطلب بنجاح');
       print('📝 الطلب: $requestId - الحالة: $status');
@@ -131,9 +157,16 @@ class FirebaseRequestRepository implements RequestRepository {
       final requestDoc = await requestsCollection.doc(requestId).get();
 
       if (!requestDoc.exists) {
+        print('❌ الطلب غير موجود: $requestId');
         throw Exception('الطلب غير موجود: $requestId');
       }
 
+      // 🔥 طباعة بيانات الطلب قبل الحذف (للتصحيح)
+    final data = requestDoc.data() as Map<String, dynamic>;
+    print('📋 بيانات الطلب قبل الحذف:');
+    print('   - studentID: ${data['studentID']}');
+    print('   - requestType: ${data['requestType']}');
+    print('   - status: ${data['status']}');
       // حذف الطلب من Firestore
       await requestsCollection.doc(requestId).delete();
 

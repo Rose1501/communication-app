@@ -2,10 +2,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graduation_project_repository/graduation_project_repository.dart';
 import 'package:myproject/components/themeData/colors_app.dart';
 import 'package:myproject/components/themeData/text_style.dart';
 import 'package:myproject/components/widget/onlyTitleAppBar.dart';
 import 'package:myproject/features/forget_password/bloc/auth_bloc.dart';
+import 'package:myproject/features/graduation_project/bloc/project_bloc/project_bloc.dart';
 import 'package:myproject/features/home/bloc/my_user_bloc/my_user_bloc.dart';
 import 'package:myproject/features/home/bloc/post_bloc/advertisement_bloc.dart';
 import 'package:myproject/features/home/view/widget/bottom_navigation_bar.dart';
@@ -26,6 +28,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0; // مؤشر للعنصر المحدد في شريط التنقل
+  ProjectSettingsModel? _projectSettings; // متغير لتخزين إعدادات المشروع
 
   @override
   void initState() {
@@ -41,7 +44,11 @@ class _HomeScreenState extends State<HomeScreen> {
           myUserBloc.add(GetMyUser());
         }
       }
+      // تحميل الإعلانات
       context.read<AdvertisementBloc>().add(LoadAdvertisementsEvent());
+      // تحميل إعدادات المشروع
+      print('🔍 بدء تحميل إعدادات المشروع...');
+      context.read<ProjectBloc>().add(GetProjectSettings());
     });
   }
 
@@ -105,6 +112,22 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           },
         ),
+        // مستمع لأحداث ProjectBloc
+        BlocListener<ProjectBloc, ProjectState>(
+          listener: (context, state) {
+            if (state is ProjectError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.error), backgroundColor: Colors.red),
+              );
+            }else if (state is ProjectSettingsLoaded) {
+              // تحديث إعدادات المشروع عند تحميلها
+              print('✅ تم تحميل إعدادات المشروع في HomeScreen');
+              setState(() {
+                _projectSettings = state.settings;
+              });
+            }
+          },
+        ),
       ],
       child: BlocBuilder<MyUserBloc, MyUserState>(
         builder: (context, myUserState) {
@@ -163,24 +186,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                       Column(
                         children: [
-                          NewPostBar(
-                            onTap: () => _navigateToAddAdvertisement(context),
-                            userModel: userModel,
-                            onProfileTap: () {
-                              // للذهاب إلى صفحة البروفايل عند النقر على الصورة
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => BlocProvider.value(
-                                        value: BlocProvider.of<AuthBloc>(
-                                          context,
-                                        ), // تمرير الـ AuthBloc الحالي
-                                        child: UserProfileFloatingPage(),
-                                      ),
-                                ),
+                          BlocBuilder<ProjectBloc, ProjectState>(
+                            builder: (context, projectState) {
+                              // تحديث إعدادات المشروع عند التغيير
+                              if (projectState is ProjectSettingsLoaded) {
+                                _projectSettings = projectState.settings;
+                                print('✅ تحديث إعدادات المشروع في BlocBuilder');
+                              }
+                              return NewPostBar(
+                                onTap: () => _navigateToAddAdvertisement(context),
+                                userModel: userModel,
+                                onProfileTap: () {
+                                  // للذهاب إلى صفحة البروفايل عند النقر على الصورة
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => BlocProvider.value(
+                                            value: BlocProvider.of<AuthBloc>(
+                                              context,
+                                            ), // تمرير الـ AuthBloc الحالي
+                                            child: UserProfileFloatingPage(),
+                                          ),
+                                    ),
+                                  );
+                                },
+                                 projectSettings: _projectSettings, // تمرير إعدادات المشروع مباشرة
                               );
-                            },
+                            }
                           ),
                           ContainreLine(),
                         ],

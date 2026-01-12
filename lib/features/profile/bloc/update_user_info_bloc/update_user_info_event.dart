@@ -4,7 +4,7 @@ abstract class UpdateUserInfoEvent extends Equatable {
   const UpdateUserInfoEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object> props() => [];
 }
 
 class UploadPicture extends UpdateUserInfoEvent {
@@ -14,7 +14,7 @@ class UploadPicture extends UpdateUserInfoEvent {
 	const UploadPicture(this.file, this.userModel);
 
 	@override
-  List<Object> get props => [file, userModel];
+  List<Object> props() => [file, userModel];
 }
 
 class RemoveProfilePicture extends UpdateUserInfoEvent {
@@ -23,5 +23,16 @@ class RemoveProfilePicture extends UpdateUserInfoEvent {
   const RemoveProfilePicture(this.userId);
 
   @override
-  List<Object> get props => [userId];
+  List<Object> props() => [userId];
 }
+
+class SearchUserByUserID extends UpdateUserInfoEvent {
+  final String userID;
+
+  const SearchUserByUserID(this.userID);
+
+  @override
+  List<Object> props() => [userID];
+}
+
+class ResetSearchState extends UpdateUserInfoEvent {}

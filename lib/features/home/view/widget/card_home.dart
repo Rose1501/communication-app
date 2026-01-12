@@ -9,7 +9,7 @@ import 'package:user_repository/user_repository.dart';
 // كلاس يمثل بطاقة إعلان في الصفحة الرئيسية
 class CardHome extends StatelessWidget {
   final UserModels userModel;
-  final AdvertisementModel adv;
+  final AdvertisemenModel adv;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
   final VoidCallback? onRepublish;

@@ -5,33 +5,33 @@ abstract class AdvertisementEvent extends Equatable {
   const AdvertisementEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object> props() => [];
 }
 
 // حدث تحميل الإعلانات
 class LoadAdvertisementsEvent extends AdvertisementEvent {
   @override
-  List<Object> get props => [];
+  List<Object> props() => [];
 }
 
 // حدث إضافة إعلان جديد
 class AddAdvertisementEvent extends AdvertisementEvent {
-  final AdvertisementModel advertisement;
+  final AdvertisemenModel advertisement;
 
   const AddAdvertisementEvent({required this.advertisement});
 
   @override
-  List<Object> get props => [advertisement];
+  List<Object> props() => [advertisement];
 }
 
 // حدث تحديث إعلان
 class UpdateAdvertisementEvent extends AdvertisementEvent {
-  final AdvertisementModel advertisement;
+  final AdvertisemenModel advertisement;
 
   const UpdateAdvertisementEvent({required this.advertisement});
 
   @override
-  List<Object> get props => [advertisement];
+  List<Object> props() => [advertisement];
 }
 
 // حدث حذف إعلان
@@ -41,13 +41,13 @@ class DeleteAdvertisementEvent extends AdvertisementEvent {
   const DeleteAdvertisementEvent({required this.advertisementId});
 
   @override
-  List<Object> get props => [advertisementId];
+  List<Object> props() => [advertisementId];
 }
 
 // حدث تحديث حالة الإعلانات
 class RefreshAdvertisementsEvent extends AdvertisementEvent {
   @override
-  List<Object> get props => [];
+  List<Object> props() => [];
 }
 
 // 🔥 حدث  لإزالة الصورة
@@ -58,7 +58,7 @@ class RemoveAdvertisementImageEvent extends AdvertisementEvent {
 
 // حدث إعادة نشر الإعلان
 class RepublishAdvertisementEvent extends AdvertisementEvent {
-  final AdvertisementModel originalAdvertisement;
+  final AdvertisemenModel originalAdvertisement;
   final String newDescription;
   final String newCustom;
   final UserModels currentUser;
@@ -75,7 +75,7 @@ class RepublishAdvertisementEvent extends AdvertisementEvent {
   });
 
   @override
-  List<Object> get props => [
+  List<Object> props() => [
     originalAdvertisement,
     newDescription,
     newCustom,

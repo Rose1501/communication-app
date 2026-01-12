@@ -8,10 +8,35 @@ class Routes {
   static const String forgetPassword = '/ForgetPassword';
   static const String loading = '/loadingScreen';
   static const String recoveryPassword = '/RecoveryPassword';
+  static const String archivedCurricula   = '/ArchivedCurriculaScreen';
+  static const String officeHours = '/office-hours';
+  static const String teachingCourses = '/teaching-courses';
   static const String addAdvertisement = '/AddNewAdvertisement';
   static const String about = '/Info';
   static const String displayRequest = '/DisplayRequestStudent';
   static const String replyRequest = '/ReplyRequest';
   static const String sendRequest = '/SendRequest';
   static const String complaintsList ='/ComplaintsListScreen';
+  static const String dataManagement = '/DataManagementScreen';
+  static const String coursesManagement = '/courses-management';
+  static const String semestersManagement = '/semesters-management';
+  static const String semesterCourses = '/semester-courses';
+
+  static const String subjectiveMain = '/subjective-main';
+  static const String doctorGroups = '/doctor-groups';
+  static const String studentGroups = '/student-groups';
+  static const String groupContent = '/group-content';
+  static const String curriculum = '/curriculum';
+  static const String assignments = '/assignments';
+  static const String advertisements = '/advertisements';
+  static const String marks = '/marks';
+  static const String groupchat = '/group-chat';
+  static const String privateChat   = '/private-chat';
+  static const String doctorsChat = '/doctors-chat';
+  static const String chatHome = '/chatHomeScreen';
+  static const String userSearch = '/userSearch';
+  static const String notificationsList = '/notificationsList';
+  static const String projectManagementDashboard = '/project-management-dashboard';
+  static const String projectDetails = '/project-details';
+  static const String taskSubmission = '/projects_task_submissions';
 }

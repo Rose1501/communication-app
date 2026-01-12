@@ -16,6 +16,7 @@ class UpdateUserInfoBloc extends Bloc<UpdateUserInfoEvent, UpdateUserInfoState> 
     on<UpdateUserInfoEvent>((event, emit) {
       print('🎯 UpdateUserInfoBloc received event: ${event.runtimeType}');
     });
+    
     // التعامل مع حدث رفع الصورة
     on<UploadPicture>((event, emit) async {
       print('🎯 === UPLOAD PICTURE EVENT STARTED ===');
@@ -82,6 +83,48 @@ class UpdateUserInfoBloc extends Bloc<UpdateUserInfoEvent, UpdateUserInfoState> 
     print('💥 State changed to: RemovePictureFailure');
   }
       print('🗑️ === REMOVE PROFILE PICTURE EVENT COMPLETED ===');
+    });
+  
+  // 🔥 حدث جديد: البحث عن مستخدم باستخدام رقم القيد
+    on<SearchUserByUserID>((event, emit) async {
+      print('🔍 === SEARCH USER BY USERID EVENT STARTED ===');
+      print('🔍 Searching for user with ID: ${event.userID}');
+      
+      emit(SearchUserLoading());
+      print('🔄 State changed to: SearchUserLoading');
+      
+      try {
+        final user = await _userRepository.getUserByUserID(event.userID);
+        print('✅ User found: ${user.name}');
+        
+        emit(SearchUserSuccess(user: user));
+        print('🎉 State changed to: SearchUserSuccess');
+      } catch (e) {
+        print('❌ Search user error: $e');
+        String errorMessage;
+        
+        if (e.toString().contains('غير موجود') || 
+            e.toString().contains('not found') ||
+            e.toString().contains('المستخدم غير موجود')) {
+          errorMessage = 'المستخدم غير موجود';
+        } else if (e.toString().contains('فارغ')) {
+          errorMessage = 'رقم القيد لا يمكن أن يكون فارغاً';
+        } else if (e.toString().contains('network') || e.toString().contains('اتصال')) {
+          errorMessage = 'خطأ في الاتصال بالإنترنت';
+        } else {
+          errorMessage = 'فشل في البحث عن المستخدم: ${e.toString()}';
+        }
+        
+        emit(SearchUserFailure(error: errorMessage));
+        print('💥 State changed to: SearchUserFailure');
+      }
+      print('🔍 === SEARCH USER BY USERID EVENT COMPLETED ===');
+    });
+    
+  // 🔥 حدث جديد: إعادة تعيين حالة البحث
+    on<ResetSearchState>((event, emit) async {
+      print('🔄 إعادة تعيين حالة البحث');
+      emit(UpdateUserInfoInitial());
     });
   }
 }

@@ -25,7 +25,8 @@ class DisplayRequestStudent extends StatefulWidget {
 }
 
 class _DisplayRequestStudentState extends State<DisplayRequestStudent> {
-  int _selectedIndex = 3;
+  int _selectedIndex = 5;
+  int? _previousRequestsCount;
 
   @override
   void initState() {
@@ -130,12 +131,44 @@ class _DisplayRequestStudentState extends State<DisplayRequestStudent> {
           ),
           body: BlocConsumer<RequestBloc, RequestState>(
             listener: (context, state) {
+              // 🔥 معالجة حالة الحذف الناجح
+                  if (state is RequestFailure) {
+                    // التحقق إذا كان الخطأ متعلقاً بالحذف
+                    if (state.error.contains('حذف')) {
+                      print('❌ حدث خطأ أثناء الحذف: ${state.error}');
+                      ShowWidget.showMessage(
+                        context,
+                        'فشل في حذف الطلب',
+                        Colors.red,
+                        TextStyle(color: Colors.white, fontSize: 13),
+                      );
+                    }
+                  }
+                  // 🔥 معالجة حالة التحميل بعد الحذف
+                      if (state is StudentRequestsLoaded) {
+                        print('✅ تم تحميل الطلبات بعد الحذف، العدد: ${state.requests.length}');
+                        
+                        // إظهار رسالة نجاح إذا كان هناك طلبات أقل من السابق
+                        final previousCount = _previousRequestsCount;
+                        if (previousCount != null && state.requests.length < previousCount) {
+                          ShowWidget.showMessage(
+                            context,
+                            'تم حذف الطلب بنجاح',
+                            Colors.green,
+                            TextStyle(color: Colors.white, fontSize: 13),
+                          );
+                        }
+                      }
               if (state is RequestSuccess) {
                 print('✅ طلب جديد تم إرساله - تحديث القائمة تلقائياً');
                 context.read<RequestBloc>().add(LoadStudentRequestsEvent(user.userID));
               }
             },
             builder: (context, state) {
+              // 🔥 حفظ عدد الطلبات الحالي للمقارنة لاحقاً
+              if (state is StudentRequestsLoaded) {
+                _previousRequestsCount = state.requests.length;
+              }
               return RefreshIndicator(
                 onRefresh: _handleRefresh,
                 color: ColorsApp.primaryColor,

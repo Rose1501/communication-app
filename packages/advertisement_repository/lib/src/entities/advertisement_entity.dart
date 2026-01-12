@@ -48,7 +48,7 @@ class AdvertisementEntity extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
+  List<Object?> props() => [
         id,
         description,
         timeAdv,

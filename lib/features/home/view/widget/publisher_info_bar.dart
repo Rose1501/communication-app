@@ -10,7 +10,7 @@ import 'package:user_repository/user_repository.dart';
 // شريط معلومات الناشر في بطاقة الإعلان
 class PublisherInfoBar extends StatelessWidget {
   final UserModels userModel;
-  final AdvertisementModel adv;
+  final AdvertisemenModel adv;
   final Function()? onEdit; // دالة التعديل
   final Function()? onDelete; // دالة الحذف
   final Function()? onRepublish; //دالة اعادة النشر

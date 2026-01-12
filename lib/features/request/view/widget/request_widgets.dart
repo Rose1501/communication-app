@@ -56,6 +56,8 @@ class RequestWidgets {
     required bool showDelete,
   }) {
   print('🎴 بناء بطاقة الطلب: ${request.id}');
+  print('   - حالة الحذف: ${showDelete ? "مفعل" : "غير مفعل"}');
+  print('   - حالة الطلب: ${request.status}');
   final hasAdminReply = request.adminReply != null && request.adminReply!.isNotEmpty;
     return Card(
       key: ValueKey(request.id),

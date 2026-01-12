@@ -1,0 +1,21 @@
+name: teacher_data_repository
+description: Dart package for managing teacher's data (office hours, teaching courses, archived curricula).
+publish_to: "none"
+version: 1.0.0
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cloud_firestore: ^6.0.0
+  equatable: ^2.0.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

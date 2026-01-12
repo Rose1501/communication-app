@@ -282,36 +282,39 @@ void _showDeleteConfirmation(String actionMessage) {
                 ),
             const SizedBox(height: 16),
             // أزرار الإجراء
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
+            Container(
+              width: double.infinity,
+              child: Wrap(
+                spacing: 12, // المسافة بين الأزرار
+                runSpacing: 8, // المسافة بين الصفوف إذا اضطروا للتفاف
+                alignment: WrapAlignment.center, // توزيع متساوي
+                children: [
+                  // زر الإلغاء
+                  OutlinedButton(
                     onPressed: () {
-                        _replyFocusNode.unfocus();
-                        Navigator.pop(context);
-                      },
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                      ),
+                      _replyFocusNode.unfocus();
+                      Navigator.pop(context);
+                    },
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    ),
                     child: const Text('إلغاء'),
                   ),
-                ),
-                const SizedBox(width:12),
-                Expanded(
-                  child: ElevatedButton(
+                  // زر الإرسال/التحديث
+                  ElevatedButton(
                     onPressed: _submitReply,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _selectedStatus == 'موافقة' ? Colors.green : Colors.red,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     ),
                     child: Text(
                       widget.existingReply != null ? 'تحديث الرد' : 
-                      _selectedStatus == 'موافقة' ? 'موافقةوإرسال' : 'رفض وإرسال',
+                      _selectedStatus == 'موافقة' ? 'موافقة و إرسال' : 'رفض و إرسال',
                       style: const TextStyle(color: Colors.white),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

@@ -16,5 +16,21 @@ abstract class UserRepository {
   Future<void> resetPasswordWithCode(String email, String code, String newPassword);
   Future<void> removeProfilePicture(String userId);
   Future<void> removePictureFromUserAdvertisements(String userId);
-  
+  // 🔥 لإدارة المستخدمين
+  Future<List<UserModels>> getAllUsers();
+  Future<UserModels> addUser(UserModels user);
+  Future<UserModels> updateUser(UserModels user, String originalUserID);
+  Future<void> deleteUser(String userId);
+  Future<Map<String, dynamic>> importUsersFromExcel(List<Map<String, dynamic>> excelData);
+  Future<void> cleanupCorruptedUsers();
+  /// 🔥  دالةالبحث عن مستخدم باستخدام رقم القيد او الاسم
+  Future<UserModels> getUserByUserID(String query);
+   /// 🔥 دالة جديدة لجلب المستخدمين حسب الدور أو قائمة من IDs
+  Future<List<UserModels>> getUsersByRoleOrIds({
+    String? role, // دور معين (مثال: 'Doctor')
+    List<String>? userIds, // قائمة من أرقام القيد
+  });
+  // 🔥 إضافة الدالة الجديدة لحفظ التوكن
+  Future<void> updateFcmToken({required String firebaseUID, required String token});
+  Future<void> ensureFirebaseUidAndSetFcmToken({required String token});
 }

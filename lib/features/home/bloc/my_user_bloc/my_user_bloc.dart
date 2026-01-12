@@ -18,6 +18,7 @@ class MyUserBloc extends Bloc<MyUserEvent, MyUserState> {
 		super(const MyUserState.loading()) {
     on<GetMyUser>((event, emit) async {
       try {
+        emit(const MyUserState.loading());
         // جلب بيانات المستخدم الحالي من المستودع
 				UserModels myUser= await _userRepository.getCurrentUser();
           print('3.تم جلب بيانات المستخدم الحالي: ${myUser.name}');
@@ -28,6 +29,7 @@ class MyUserBloc extends Bloc<MyUserEvent, MyUserState> {
     } else {
       print('🔍 لا توجد صورة للمستخدم بعد الجلب');
     }
+    await Future.delayed(const Duration(milliseconds: 100));
         emit(MyUserState.success(myUser));
       } catch (e) {
 			log(e.toString());

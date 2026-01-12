@@ -166,7 +166,7 @@ void _onImagePicked(
         print('ℹ️ لا توجد ملفات للرفع');
       }
       // إنشاء الإعلان مع البيانات المشفرة
-      final advertisement = AdvertisementModel(
+      final advertisement = AdvertisemenModel(
         id: advertisementId,
         description: currentState.description,
         timeAdv: DateTime.now(),

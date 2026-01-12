@@ -142,6 +142,40 @@ BoxDecoration borderBottomRightTopLeftprimary = BoxDecoration(
   ),
 );
 
+BoxDecoration dataManagementCardDecoration = BoxDecoration(
+  color: ColorsApp.white,
+  borderRadius: BorderRadius.circular(16),
+  boxShadow: [
+    BoxShadow(
+      color: Colors.black.withOpacity(0.1),
+      blurRadius: 10,
+      offset: const Offset(0, 4),
+    ),
+  ],
+);
+
+BoxDecoration primaryGradientDecoration = BoxDecoration(
+  gradient: LinearGradient(
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+    colors: [
+      ColorsApp.primaryColor,
+      ColorsApp.primaryColor.withOpacity(0.8),
+    ],
+  ),
+  borderRadius: BorderRadius.circular(16),
+);
+
+BoxDecoration borderAllPrimary = BoxDecoration(
+  borderRadius: BorderRadius.circular(12),
+  border: Border.all(color: ColorsApp.primaryColor, width: 1.5),
+);
+
+BoxDecoration successDecoration = BoxDecoration(
+  color: ColorsApp.green.withOpacity(0.1),
+  borderRadius: BorderRadius.circular(12),
+  border: Border.all(color: ColorsApp.green),
+);
 /**
  *   
  */

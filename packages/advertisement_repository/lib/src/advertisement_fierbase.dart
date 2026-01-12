@@ -5,19 +5,24 @@ import 'package:advertisement_repository/advertisement_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart'as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:notification_repository/notification_repository.dart';
 import 'package:user_repository/user_repository.dart';
 import 'package:uuid/uuid.dart';
 
 class AdvertisementFirebaseRepository implements AdvertisementRepository {
   final CollectionReference advcollection;
+  final NotificationsRepository? _notificationsRepository;
 
   // Constructor يحتاج إلى instance من FirebaseFirestore
-  AdvertisementFirebaseRepository([FirebaseFirestore? firestore])
-      : advcollection = (firestore ?? FirebaseFirestore.instance).collection('advertisements');
+  AdvertisementFirebaseRepository({
+    FirebaseFirestore? firestore,
+    NotificationsRepository? notificationsRepository,
+  }) : advcollection = (firestore ?? FirebaseFirestore.instance).collection('advertisements'),
+        _notificationsRepository = notificationsRepository;
 
   // إضافة إعلان جديد
   @override
-  Future<AdvertisementModel> addAdvertisement(AdvertisementModel advertisement) async {
+  Future<AdvertisemenModel> addAdvertisement(AdvertisemenModel advertisement) async {
     try {
     print('✅ بدء إضافة إعلان جديد');
     print('🆕 معرّف الإعلان: ${advertisement.id}');
@@ -53,6 +58,15 @@ class AdvertisementFirebaseRepository implements AdvertisementRepository {
       print('🖼️ وجود صورة: ${advertisementWithBase64.advlImg != null}');
       // حفظ الإعلان في Firestore
       await advcollection.doc(advertisementWithBase64.id).set(advertisementWithBase64.toEntity().toDocument());
+      // 🔥 إرسال إشعار إذا كان notificationsRepository موجود
+      if (_notificationsRepository != null) {
+        try {
+          await _notificationsRepository.saveAdvertisementNotification(advertisementWithBase64);
+          print('📨 تم إرسال إشعار الإعلان');
+        } catch (e) {
+          print('⚠️ خطأ في إرسال إشعار الإعلان: $e');
+        }
+      }
       print('💾 تم حفظ الإعلان في Firestore بنجاح');
       return advertisementWithBase64;
     } catch (e) {
@@ -63,7 +77,7 @@ class AdvertisementFirebaseRepository implements AdvertisementRepository {
 
   // الحصول على جميع الإعلانات
   @override
-  Future<List<AdvertisementModel>> getAdvertisements() async {
+  Future<List<AdvertisemenModel>> getAdvertisements() async {
     
     try {
       // جلب جميع المستندات من مجموعة 'advertisements'
@@ -71,7 +85,7 @@ class AdvertisementFirebaseRepository implements AdvertisementRepository {
       
       // تحويل كل مستند إلى كائن AdvertisementModel
       return querySnapshot.docs.map((doc) {
-        return AdvertisementModel.fromEntity(
+        return AdvertisemenModel.fromEntity(
           AdvertisementEntity.fromDocument(doc.data() as Map<String, dynamic>),
         );
       }).toList();
@@ -85,7 +99,7 @@ class AdvertisementFirebaseRepository implements AdvertisementRepository {
 
   // تحديث إعلان
   @override
-  Future<void> updateAdvertisement(AdvertisementModel advertisement) async {
+  Future<void> updateAdvertisement(AdvertisemenModel advertisement) async {
     try {
       print('✏️ بدء تحديث الإعلان: ${advertisement.id}');
       print('📝 البيانات المرسلة للتحديث:');
@@ -157,8 +171,8 @@ class AdvertisementFirebaseRepository implements AdvertisementRepository {
 
   // 🔥 دالة مخصصة لإعادة نشر الإعلان
 @override
-Future<AdvertisementModel> republishAdvertisement({
-  required AdvertisementModel originalAdvertisement,
+Future<AdvertisemenModel> republishAdvertisement({
+  required AdvertisemenModel originalAdvertisement,
   required String newDescription,
   required String newCustom,
   required UserModels currentUser,
@@ -189,7 +203,7 @@ Future<AdvertisementModel> republishAdvertisement({
     }
 
     // إنشاء الإعلان الجديد
-    final newAdvertisement = AdvertisementModel(
+    final newAdvertisement = AdvertisemenModel(
       id: newAdId,
       description: newDescription,
       custom: newCustom,
@@ -207,6 +221,19 @@ Future<AdvertisementModel> republishAdvertisement({
 
     // حفظ الإعلان الجديد في Firestore
     await advcollection.doc(newAdId).set(newAdvertisement.toEntity().toDocument());
+    // 🔥 **إرسال الإشعار بعد حفظ الإعلان بنجاح**
+      if (_notificationsRepository != null) {
+        try {
+          print('📨 محاولة إرسال إشعار الإعلان بعد إعادة النشر...');
+          await _notificationsRepository.saveAdvertisementNotification(newAdvertisement);
+          print('✅ تم إرسال إشعار الإعلان بنجاح');
+        } catch (e) {
+          print('❌ خطأ في إرسال إشعار الإعلان: $e');
+          print('⚠️ سيتم المتابعة بدون إشعار');
+        }
+      } else {
+        print('⚠️ notificationsRepository غير متوفر، لن يتم إرسال إشعار');
+      }
     
     print('✅ تم إعادة نشر الإعلان بنجاح');
     return newAdvertisement;

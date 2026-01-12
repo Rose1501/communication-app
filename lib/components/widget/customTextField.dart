@@ -7,11 +7,13 @@ class CustomDropdown extends StatefulWidget {
   final List<String> items; // قائمة الخيارات
   final String hint; // نص التلميح
   final ValueChanged<String?> onChanged; // دالة للتعامل مع تغيير القيمة
+  final String? Function(String)? displayMapper; // دالة لتحويل القيمة للعرض
 
   const CustomDropdown({
     required this.items,
     required this.hint,
     required this.onChanged,
+    this.displayMapper,
     super.key,
   });
 
@@ -40,19 +42,24 @@ class _CustomDropdownState extends State<CustomDropdown> {
           border: OutlineInputBorder(
             borderSide: BorderSide(
               color: ColorsApp.primaryColor, // اللون الذي تريده للحواف
-              width: 10.0, // سمك الحافة
+              width: 1.0, // سمك الحافة
             ),
           ),
       
           contentPadding: EdgeInsets.symmetric(horizontal: 12), // مسافة داخلية
+          isDense: true,
         ),
         items: widget.items.map((String item) {
+          final displayText = widget.displayMapper != null 
+              ? widget.displayMapper!(item) 
+              : item;
+          
           return DropdownMenuItem<String>(
             value: item,
             child: Align(
               alignment: Alignment.centerRight, // محاذاة النص إلى اليمين
               child: Text(
-                item,
+                displayText ?? item, // 🔥 عرض النص المحول أو الأصلي
                 style: const TextStyle(
                   fontFamily: 'Cairo',
                 ),

@@ -1,10 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:complaint_repository/complaint_repository.dart';
+import 'package:notification_repository/notification_repository.dart';
 import 'complaint_repo.dart';
 
 class FirebaseComplaintRepository implements ComplaintRepository {
   final CollectionReference complaintsCollection =
       FirebaseFirestore.instance.collection('complaints');
+
+      final NotificationsRepository? _notificationsRepository;
+      // Constructor مع dependency injection
+  FirebaseComplaintRepository({NotificationsRepository? notificationsRepository})
+      : _notificationsRepository = notificationsRepository;
 
   ComplaintModel _documentToComplaint(DocumentSnapshot doc) {
     try {
@@ -30,6 +36,17 @@ class FirebaseComplaintRepository implements ComplaintRepository {
       await complaintsCollection
           .doc(docRef.id)
           .set(docRef.toEntity().toDocument());
+
+      // 🔥 إرسال إشعار إذا كان notificationsRepository موجود
+      if (_notificationsRepository != null) {
+        try {
+          await _notificationsRepository.saveComplaintNotification(docRef);
+          print('📨 تم إرسال إشعار الشكوى');
+        } catch (e) {
+          print('⚠️ خطأ في إرسال إشعار الشكوى: $e');
+          // لا نعيد الخطأ هنا لأن حفظ الشكوى ناجح
+        }
+      }
 
       print('✅ تم إرسال الشكوى بنجاح: ${docRef.id}');
       return docRef;
@@ -110,6 +127,16 @@ class FirebaseComplaintRepository implements ComplaintRepository {
     try {
       print('✏️ تحديث حالة الشكوى: $complaintId إلى $status');
 
+      // الحصول على الشكوى الحالية أولاً
+      final complaintDoc = await complaintsCollection.doc(complaintId).get();
+      
+      if (!complaintDoc.exists) {
+        throw Exception('الشكوى غير موجودة: $complaintId');
+      }
+
+      final oldComplaint = _documentToComplaint(complaintDoc);
+      final oldStatus = oldComplaint.status;
+
       final updateData = <String, dynamic>{
         'status': status,
         'updatedAt': DateTime.now(),
@@ -118,6 +145,24 @@ class FirebaseComplaintRepository implements ComplaintRepository {
       };
 
       await complaintsCollection.doc(complaintId).update(updateData);
+
+      // الحصول على الشكوى المحدثة
+      final updatedDoc = await complaintsCollection.doc(complaintId).get();
+      final updatedComplaint = _documentToComplaint(updatedDoc);
+
+      // 🔥 إرسال إشعار تحديث الحالة إذا كان notificationsRepository موجود
+      if (_notificationsRepository != null) {
+        try {
+          await _notificationsRepository.saveComplaintStatusUpdateNotification(
+            updatedComplaint, 
+            oldStatus
+          );
+          print('📨 تم إرسال إشعار تحديث الحالة');
+        } catch (e) {
+          print('⚠️ خطأ في إرسال إشعار تحديث الحالة: $e');
+          // لا نعيد الخطأ هنا لأن تحديث الشكوى ناجح
+        }
+      }
 
       print('✅ تم تحديث حالة الشكوى بنجاح');
     } catch (e) {

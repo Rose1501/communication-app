@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:user_repository/src/entities/entities.dart';
 
 class UserModels extends Equatable {
-  final String userID;
+  final String userID;//رقم الاكاديمي
   final String name;
   final String email;
   final String role;
@@ -90,7 +90,7 @@ static UserModels fromEntity(UserEntities entities) {
 }
 
   @override
-  List<Object?> get props => [
+  List<Object?> props() => [
         userID,
         name,
         email,

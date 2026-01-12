@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:myproject/components/widget/image_preview_dialog.dart';
 
 // دالة لبناء وعرض صورة الإعلان مع إمكانيات متقدمة
-Widget buildAdvertisementImage(BuildContext context, AdvertisementModel advertisement) {
+Widget buildAdvertisementImage(BuildContext context, AdvertisemenModel advertisement) {
   if (advertisement.advlImg == null || advertisement.advlImg!.isEmpty) {
     return const SizedBox.shrink();
   }
@@ -69,7 +69,7 @@ Widget buildAdvertisementImage(BuildContext context, AdvertisementModel advertis
   );
 }
 // دالة مساعدة لبناء عنصر الصورة بناءً على نوعها
-Widget _buildImageWidget(AdvertisementModel advertisement) {
+Widget _buildImageWidget(AdvertisemenModel advertisement) {
   if (_isBase64Image(advertisement.advlImg!)) {
     return Image.memory(
       _decodeBase64(advertisement.advlImg!),

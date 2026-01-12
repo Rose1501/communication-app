@@ -123,10 +123,10 @@ void _onPanelStateChanged(bool shouldShowStats) {
         final complaintDate = complaint.createdAt;
         final startDay = DateTime(_startDate!.year, _startDate!.month, _startDate!.day);
         final complaintDay = DateTime(complaintDate.year, complaintDate.month, complaintDate.day);
-        
+        print('$startDay');
         if (_endDate != null && !_isSameDay(_startDate!, _endDate!)) {
           final endDay = DateTime(_endDate!.year, _endDate!.month, _endDate!.day).add(const Duration(days: 1));
-          return complaintDay.isAfter(startDay) && complaintDay.isBefore(endDay);
+          return complaintDay.isAfter(startDay.subtract(const Duration(days: 1))) && complaintDay.isBefore(endDay);
         } else {
           return _isSameDay(complaintDate, _startDate!);
         }

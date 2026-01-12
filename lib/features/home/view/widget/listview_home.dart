@@ -101,8 +101,8 @@ class ListViewHome extends StatelessWidget {
   }
 
   // 🔍 دالة فلترة الإعلانات حسب role المستخدم و custom الإعلان
-List<AdvertisementModel> _filterAdvertisements(
-  List<AdvertisementModel> advertisements, 
+List<AdvertisemenModel> _filterAdvertisements(
+  List<AdvertisemenModel> advertisements, 
   UserModels currentUser
 ) {
   return advertisements.where((adv) {
@@ -152,7 +152,7 @@ List<AdvertisementModel> _filterAdvertisements(
   }).toList();
 }
 // بناء بطاقة الإعلان
-  Widget _buildAdvertisementCard(BuildContext context, AdvertisementModel adv) {
+  Widget _buildAdvertisementCard(BuildContext context, AdvertisemenModel adv) {
     return CardHome(
       userModel: adv.user,
       adv: adv,
@@ -164,7 +164,7 @@ List<AdvertisementModel> _filterAdvertisements(
   }
 
   // عرض نافذة إعادة النشر
-  void _showRepublishDialog(BuildContext context, AdvertisementModel advertisement) {
+  void _showRepublishDialog(BuildContext context, AdvertisemenModel advertisement) {
     showDialog(
       context: context,
       builder: (context) {
@@ -178,7 +178,7 @@ List<AdvertisementModel> _filterAdvertisements(
 }
 
 // 🔧 التحقق إذا كان يجب عرض أزرار التعديل والحذف
-  bool _shouldShowTargetingInfo(AdvertisementModel adv, UserModels currentUser) {
+  bool _shouldShowTargetingInfo(AdvertisemenModel adv, UserModels currentUser) {
     // عرض للمديرين والإداريين أو لناشر الإعلان
     return (currentUser.role == 'Admin' || 
             currentUser.role == 'Manager' ) &&
@@ -235,7 +235,7 @@ List<AdvertisementModel> _filterAdvertisements(
     }
   }
 // عرض نافذة تعديل الإعلان
-  void _showEditDialog(BuildContext context, AdvertisementModel advertisement) {
+  void _showEditDialog(BuildContext context, AdvertisemenModel advertisement) {
     print('✏️ فتح نافذة التعديل للإعلان: ${advertisement.id}');
     showDialog(
       context: context,

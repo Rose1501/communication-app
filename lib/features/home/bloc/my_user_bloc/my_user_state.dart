@@ -21,5 +21,5 @@ class MyUserState extends Equatable {
   const MyUserState.logout() : this._(status: MyUserStatus.logout);
 
 	@override
-  List<Object?> get props => [status, user];
+  List<Object?> props() => [status, user];
 }

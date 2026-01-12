@@ -4,7 +4,7 @@ import 'package:myproject/components/themeData/colors_app.dart';
 import 'package:myproject/components/themeData/extension.dart';
 import 'package:myproject/components/themeData/routes_app.dart';
 import 'package:myproject/features/home/bloc/my_user_bloc/my_user_bloc.dart';
-
+//aAcYAL3tWBZq8521r6VOlSYKnWy2
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
@@ -41,20 +41,24 @@ class CustomBottomNavigationBar extends StatelessWidget {
           label: 'الرئيسية',
         ),
         const BottomNavigationBarItem(
-          icon: Icon(Icons.group),
-          label: 'المستخدمين',
+          icon: Icon(Icons.storage),
+          label: 'إدارة البيانات',
         ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.notifications),
           label: 'الإشعارات',
         ),
         const BottomNavigationBarItem(
-          icon: Icon(Icons.mark_email_unread_outlined),
-          label: 'الطلبات',
+        icon: Icon(Icons.forum_outlined),
+        label: 'التواصل',
         ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.description),
           label: 'شكاوي ',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.mark_email_unread_outlined),
+          label: 'الطلبات',
         ),
       ];
     } else if (role == 'Manager') {
@@ -64,8 +68,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
           label: 'الرئيسية',
         ),
         const BottomNavigationBarItem(
-          icon: Icon(Icons.group),
-          label: 'المقررات',
+          icon: Icon(Icons.admin_panel_settings),
+          label: 'إدارة المشاريع',
         ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.notifications),
@@ -118,12 +122,16 @@ class CustomBottomNavigationBar extends StatelessWidget {
           label: 'الإشعارات',
         ),
         const BottomNavigationBarItem(
-          icon: Icon(Icons.mark_email_unread_outlined),
-          label: 'الطلبات',
+        icon: Icon(Icons.forum_outlined),
+        label: 'التواصل',
         ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.description),
           label: 'شكاوي',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.mark_email_unread_outlined),
+          label: 'الطلبات',
         ),
       ];
     }else {
@@ -161,18 +169,24 @@ void navigateToScreen(int index, String userRole, BuildContext context) {
         context.pushAndRemoveUntil(Routes.home);
         break;
       case 1:
-        // صفحة إدارة المستخدمين
+        // صفحة إدارة البيانات
+        context.pushAndRemoveUntil(Routes.dataManagement);
         break;
       case 2:
-        // صفحة الطلبات
+        // صفحة الإشعارات
+        context.pushAndRemoveUntil(Routes.notificationsList);
         break;
       case 3:
-        // الطلبات
-        context.pushAndRemoveUntil(Routes.replyRequest);
+        // تواصل
+        context.pushAndRemoveUntil(Routes.chatHome);
         break;
       case 4:
         //الشكاوي
         context.pushAndRemoveUntil(Routes.complaintsList);
+        break;
+      case 5:
+        // الطلبات
+        context.pushAndRemoveUntil(Routes.replyRequest);
         break;
     }
   } else if (userRole == 'Manager') {
@@ -181,12 +195,15 @@ void navigateToScreen(int index, String userRole, BuildContext context) {
         context.pushAndRemoveUntil(Routes.home);
         break;
       case 1:
-        // صفحة المقررات
+        context.pushAndRemoveUntil(Routes.projectManagementDashboard);
         break;
       case 2:
         // صفحة الإشعارات
+        context.pushAndRemoveUntil(Routes.notificationsList);
         break;
       case 3:
+        // تواصل
+        context.pushAndRemoveUntil(Routes.chatHome);
         break;
       case 4:
       //الشكاوي
@@ -200,12 +217,15 @@ void navigateToScreen(int index, String userRole, BuildContext context) {
         break;
       case 1:
         // صفحة المقررات
-        
+        context.pushAndRemoveUntil(Routes.subjectiveMain);
         break;
       case 2:
         // صفحة الإشعارات
+        context.pushAndRemoveUntil(Routes.notificationsList);
         break;
       case 3:
+        //تواصل
+        context.pushAndRemoveUntil(Routes.chatHome);
         break;
       case 4:
         //الشكاوي
@@ -219,17 +239,23 @@ void navigateToScreen(int index, String userRole, BuildContext context) {
         break;
       case 1:
         // صفحة المقررات
+        context.pushAndRemoveUntil(Routes.subjectiveMain);
         break;
       case 2:
         // صفحة الإشعارات
+        context.pushAndRemoveUntil(Routes.notificationsList);
         break;
       case 3:
-        // الطلبات
-        context.pushAndRemoveUntil(Routes.displayRequest);
+        // تواصل
+        context.pushAndRemoveUntil(Routes.chatHome);
         break;
       case 4:
         //الشكاوي
         context.pushAndRemoveUntil(Routes.complaintsList);
+        break;
+      case 5:
+        // الطلبات
+        context.pushAndRemoveUntil(Routes.displayRequest);
         break;
     }
   } else {
@@ -238,11 +264,9 @@ void navigateToScreen(int index, String userRole, BuildContext context) {
         context.pushAndRemoveUntil(Routes.home);
         break;
       case 1:
-        // صفحة مقرراتي
-        // Navigator.push(context, MaterialPageRoute(builder: (context) => MyCoursesScreen()));
         break;
       case 2:
-        // صفحة الملف الشخصي
+        context.pushAndRemoveUntil(Routes.notificationsList);
         break;
       case 3:
         break;

@@ -40,7 +40,7 @@ class RequestFilterUtils {
         // إذا كان هناك تاريخ نهاية (فترة زمنية)
         if (endDate != null && !_isSameDay(startDate, endDate)) {
           final endDay = DateTime(endDate.year, endDate.month, endDate.day).add(const Duration(days: 1));
-          return requestDay.isAfter(startDay) && requestDay.isBefore(endDay);
+          return requestDay.isAfter(startDay.subtract(const Duration(days: 1)))&& requestDay.isBefore(endDay);
         } else {
           // إذا كان يوم واحد فقط
           return _isSameDay(requestDate, startDate);

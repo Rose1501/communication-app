@@ -20,6 +20,7 @@ class CustomTextFiled extends StatefulWidget {
   final TextStyle? hintStyle; 
   final TextInputType? keyboardType; 
   final String? Function(String?)? validator;
+  final ValueChanged<String>? onChanged;
   final double? heightField; 
   final double? widthField;  
   const CustomTextFiled(
@@ -37,6 +38,7 @@ class CustomTextFiled extends StatefulWidget {
       this.suffixIcon , 
       this.suffixIconData,
       this.textStyle,
+      this.onChanged,
       });
 
   @override
@@ -62,6 +64,7 @@ class _CustomTextFiledState extends State<CustomTextFiled> {
         controller: widget.controller,
         keyboardType: widget.keyboardType,
         obscureText: widget.isPassword! && !isEyes ==false,
+        onChanged: widget.onChanged,
         style:    widget.textStyle ?? black12W600,
         decoration: InputDecoration(
         hintText: widget.hintText,

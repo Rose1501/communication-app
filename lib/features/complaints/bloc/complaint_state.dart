@@ -4,7 +4,7 @@ abstract class ComplaintState extends Equatable {
   const ComplaintState();
 
   @override
-  List<Object> get props => [];
+  List<Object> props() => [];
 }
 
 class ComplaintInitial extends ComplaintState {}
@@ -18,7 +18,7 @@ class ComplaintFailure extends ComplaintState {
   const ComplaintFailure({required this.error});
 
   @override
-  List<Object> get props => [error];
+  List<Object> props() => [error];
 }
 
 class StudentComplaintsLoaded extends ComplaintState {
@@ -26,7 +26,7 @@ class StudentComplaintsLoaded extends ComplaintState {
   const StudentComplaintsLoaded({required this.complaints});
 
   @override
-  List<Object> get props => [complaints];
+  List<Object> props() => [complaints];
 }
 
 class RoleComplaintsLoaded extends ComplaintState {
@@ -34,5 +34,5 @@ class RoleComplaintsLoaded extends ComplaintState {
   const RoleComplaintsLoaded({required this.complaints});
 
   @override
-  List<Object> get props => [complaints];
+  List<Object> props() => [complaints];
 }

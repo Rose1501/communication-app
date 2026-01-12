@@ -124,15 +124,29 @@ List<StudentRequestModel> _removeDuplicateRequests(List<StudentRequestModel> req
     Emitter<RequestState> emit,
   ) async {
     try {
+      print('🗑️ بدء حذف الطلب في الـ Bloc:');
+    print('   - معرف الطلب: ${event.requestId}');
+    print('   - معرف الطالب: ${event.studentID}');
+    print('   - الحالة الحالية: ${state.runtimeType}');
+    
+    // 🔥 إظهار حالة التحميل أثناء الحذف
+    emit(RequestLoading());
+
       await _requestRepository.deleteRequest(event.requestId);
-      // إعادة تحميل الطلبات بعد الحذف
-      if (state is StudentRequestsLoaded) {
-        add(LoadStudentRequestsEvent(event.studentID));
-      } else if (state is AllRequestsLoaded) {
-        add(LoadAllRequestsEvent());
-      }
+      print('✅ تم حذف الطلب بنجاح في الـ Bloc');
+    
+    // 🔥 إعادة تحميل الطلبات بعد الحذف مباشرة
+    print('🔄 إعادة تحميل طلبات الطالب: ${event.studentID}');
+    add(LoadStudentRequestsEvent(event.studentID));
     } catch (e) {
-      emit(RequestFailure(error: e.toString()));
+      print('❌ فشل حذف الطلب في الـ Bloc: $e');
+    emit(RequestFailure(error: 'فشل في حذف الطلب: ${e.toString()}'));
+    // 🔥 محاولة إعادة تحميل الطلبات رغم الفشل للحفاظ على تحديث البيانات
+    try {
+      add(LoadStudentRequestsEvent(event.studentID));
+    } catch (loadError) {
+      print('⚠️ فشل إعادة التحميل بعد الحذف: $loadError');
+    }
     }
   }
 

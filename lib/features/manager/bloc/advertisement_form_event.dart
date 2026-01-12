@@ -4,7 +4,7 @@ abstract class AdvertisementFormEvent extends Equatable {
   const AdvertisementFormEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object> props() => [];
 }
 
 class AdvertisementFormDescriptionChanged extends AdvertisementFormEvent {
@@ -13,7 +13,7 @@ class AdvertisementFormDescriptionChanged extends AdvertisementFormEvent {
   const AdvertisementFormDescriptionChanged(this.description);
 
   @override
-  List<Object> get props => [description];
+  List<Object> props() => [description];
 }
 
 class AdvertisementFormTargetChanged extends AdvertisementFormEvent {
@@ -22,7 +22,7 @@ class AdvertisementFormTargetChanged extends AdvertisementFormEvent {
   const AdvertisementFormTargetChanged(this.target);
 
   @override
-  List<Object> get props => [target];
+  List<Object> props() => [target];
 }
 
 class AdvertisementFormImagePicked extends AdvertisementFormEvent {
@@ -31,7 +31,7 @@ class AdvertisementFormImagePicked extends AdvertisementFormEvent {
   const AdvertisementFormImagePicked(this.image);
 
   @override
-  List<Object> get props => [image];
+  List<Object> props() => [image];
 }
 
 class AdvertisementFormFilePicked extends AdvertisementFormEvent {
@@ -40,7 +40,7 @@ class AdvertisementFormFilePicked extends AdvertisementFormEvent {
   const AdvertisementFormFilePicked(this.file);
 
   @override
-  List<Object> get props => [file];
+  List<Object> props() => [file];
 }
 
 class AdvertisementFormSubmitted extends AdvertisementFormEvent {
@@ -50,7 +50,7 @@ class AdvertisementFormSubmitted extends AdvertisementFormEvent {
   const AdvertisementFormSubmitted({required this.userId, required this.user});
 
   @override
-  List<Object> get props => [userId, user];
+  List<Object> props() => [userId, user];
 }
 
 class AdvertisementFormReset extends AdvertisementFormEvent {}

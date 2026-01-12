@@ -1,0 +1,40 @@
+name: notification_repository
+description: A repository for managing app notifications, abstracting the data source.
+publish_to: "none"
+version: 1.0.0
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Environment
+  flutter_dotenv: ^5.1.0  # 🔥 لحماية المفاتيح في التطوير
+  cloud_firestore: ^6.0.0
+  equatable: ^2.0.7
+  firebase_core: ^4.1.1
+  firebase_messaging: ^16.0.4
+  firebase_auth: ^6.0.0
+  flutter_local_notifications: ^19.5.0
+  uuid: ^4.5.1
+  rxdart: ^0.27.7
+  http: ^1.1.0
+  user_repository:
+    path: ../user_repository
+  advertisement_repository:
+    path: ../advertisement_repository
+  request_repository:
+    path: ../request_repository
+  complaint_repository:
+    path: ../complaint_repository
+  subjective_repository:
+    path: ../subjective_repository
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

@@ -35,7 +35,7 @@ class OnboardingScreen extends StatelessWidget {
                     const RowImageOne(),
                     getHeight(10),
                     const RowImageTwo(),
-                    getHeight(50),
+                    getHeight(150),
                     ButtonApp(
                       textData: OnboardingData.textLogin,
                       textStyle: font13Primary,
@@ -44,13 +44,13 @@ class OnboardingScreen extends StatelessWidget {
                         context.pushNamed(Routes.login);
                       },
                     ),
-                    getHeight(15),
+                    /*getHeight(15),
                     ButtonApp(
                       textData: OnboardingData.textSinup,
                       textStyle: font13Primary,
                       boxDecoration: whiteBorder25,
                       onTop: () {context.pushNamed(Routes.signup);},
-                    ),
+                    ),*/
                   ],
                 ),
               ),

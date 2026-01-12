@@ -63,7 +63,7 @@ class ComplaintEntity extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
+  List<Object?> props() => [
         id,
         title,
         description,

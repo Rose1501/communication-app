@@ -3,12 +3,15 @@ import 'dart:io';
 import 'package:advertisement_repository/advertisement_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graduation_project_repository/graduation_project_repository.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:myproject/components/themeData/colors_app.dart';
 import 'package:myproject/components/themeData/outline_border_app.dart';
+import 'package:myproject/components/themeData/routes_app.dart';
 import 'package:myproject/components/themeData/show_widget.dart';
 import 'package:myproject/components/themeData/size_box.dart';
 import 'package:myproject/components/themeData/text_style.dart';
+import 'package:myproject/features/graduation_project/view/widgets/project_search_bar.dart';
 import 'package:myproject/features/home/bloc/post_bloc/advertisement_bloc.dart';
 import 'package:myproject/features/home/view/home_data.dart';
 import 'package:user_repository/user_repository.dart';
@@ -18,10 +21,14 @@ class NewPostBar extends StatelessWidget {
   final VoidCallback onTap;
   final UserModels userModel;
   final VoidCallback onProfileTap;
-  const NewPostBar({super.key, required this.onTap, required this.userModel, required this.onProfileTap});
+    final ProjectSettingsModel? projectSettings; // استقبال إعدادات المشروع مباشرة
+  const NewPostBar({super.key, required this.onTap, required this.userModel, required this.onProfileTap,    this.projectSettings,});
 
   @override
   Widget build(BuildContext context) {
+    print ('🔍 بناء شريط المنشور الجديد للمستخدم: ${userModel.userID}, الدور: ${userModel.role}');
+    // التحقق مما إذا كان المستخدم مؤهلاً لعرض زر المشروع
+    final bool showProjectButton = _shouldShowProjectButton();
     return Padding(
             padding: const EdgeInsets.all(5.0),
             child: Container(
@@ -66,11 +73,95 @@ class NewPostBar extends StatelessWidget {
                     onPressed: () => _pickImageAndPublishDirectly(context),
                   ),
                   ],
+                  // شريط البحث للدكاترة والطلاب
+            if(userModel.role == 'Student' || userModel.role == 'Doctor') ...[
+              Expanded(
+                child: ProjectSearchBar(currentUser: userModel),
+              ),
+              getWidth(5),
+            ],
+            // عرض زر المشروع للمستخدمين المؤهلين
+            if (showProjectButton) ...[
+              _buildProjectAccessButton(context),
+              getWidth(5),
+            ] 
                 ],
               ),
             ),
           );
   }
+
+  // التحقق مما إذا كان يجب عرض زر المشروع
+  bool _shouldShowProjectButton() {
+    // إذا كانت إعدادات المشروع متوفرة
+    // إذا كانت إعدادات المشروع متوفرة
+    if (projectSettings != null) {
+      print('✅ إعدادات المشروع متوفرة');
+      print('🔍 كود الانضمام: ${projectSettings!.joinCode}');
+      print('🔍 عدد الطلاب: ${projectSettings!.studentList.length}');
+      print('🔍 عدد المشرفين: ${projectSettings!.adminUsers.length}');
+      
+      // التحقق مما إذا كان المستخدم طالبًا وهو في قائمة الطلاب
+      if (userModel.role == 'Student') {
+        final isInStudentList = projectSettings!.studentList.contains(userModel.userID);
+        print('🔍 الطالب ${userModel.userID} في قائمة الطلاب: $isInStudentList');
+        if (isInStudentList) {
+          print('✅ الطالب مؤهل لعرض زر المشروع');
+          return true;
+        }
+      }
+      // التحقق مما إذا كان الطبيب مشرفًا
+      if (userModel.role == 'Doctor') {
+        final adminIds = projectSettings!.adminUsers.map((admin) => admin.userID).toList();
+        print('🔍 قائمة معرفات المشرفين: $adminIds');
+        final isSupervisor = projectSettings!.adminUsers.any((admin) => admin.userID == userModel.userID);
+        print('🔍 الطبيب ${userModel.userID} مشرف: $isSupervisor');
+        if (isSupervisor) {
+          print('✅ الطبيب مؤهل لعرض زر المشروع');
+          return true;
+        }
+      }
+    } else {
+      print('⚠️ إعدادات المشروع غير متوفرة بعد');
+    }
+    print('❌ المستخدم ${userModel.userID} غير مؤهل لعرض زر المشروع');
+    return false;
+  }
+
+  // بناء زر الوصول السريع للمشروع
+  Widget _buildProjectAccessButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // عند النقر، انتقل إلى شاشة تفاصيل المشروع مع تمرير المعلمات المطلوبة
+      Navigator.pushNamed(
+        context, 
+        Routes.projectDetails, // استخدام المسار المحدد في ملف Routes
+        arguments: {
+          'projectSettings': projectSettings, 
+          'userRole': userModel.role, // تمرير دور المستخدم
+        },
+      );
+      },
+      child: Container(
+        width: 45,
+        height: 50,
+        decoration: BoxDecoration(
+          color: ColorsApp.primaryColor,
+          shape: BoxShape.circle,
+          border: Border.all(color: ColorsApp.white, width: 2),
+        ),
+        child: ClipOval(
+          child: Image.asset(
+            'assets/images/iconCs.jpg',
+            width: 40,
+            height: 40,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+
   // 🔥اختيار الصورة ونشرها مباشرة بدون وصف
   Future<void> _pickImageAndPublishDirectly(BuildContext context) async {
     try {
@@ -124,7 +215,7 @@ class NewPostBar extends StatelessWidget {
       print('✅ تم تشفير الصورة، الطول: ${base64Image.length}');
 
       // إنشاء الإعلان بدون وصف
-      final advertisement = AdvertisementModel(
+      final advertisement = AdvertisemenModel(
         id: advertisementId,
         description: '', // 🔥 وصف فارغ
         timeAdv: DateTime.now(),

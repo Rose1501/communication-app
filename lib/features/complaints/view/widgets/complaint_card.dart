@@ -159,7 +159,7 @@ class ComplaintCard extends StatelessWidget {
 
           // زر الحذف (منفصل)
         if (currentUser.userID == complaint.studentID)
-          _buildDeleteButton(),
+          _buildDeleteButton(context),
       ],
     );
   }
@@ -226,65 +226,68 @@ class ComplaintCard extends StatelessWidget {
     );
   }
 
-  // 🔄 قسم إعادة التوجيه (للمسؤولين والمديرين)
-  Widget _buildTargetRoleSection() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.send, size: 14, color: Colors.grey),
-              getWidth(4),
-              Text(
-                'موجهة إلى:',
-                style: font12black.copyWith(fontWeight: FontWeight.bold),
-              ),
-              getWidth(8),
-              Text(
+// 🔄 قسم إعادة التوجيه (للمسؤولين والمديرين)
+Widget _buildTargetRoleSection() {
+  return Container(
+    width: double.infinity,
+    padding: const EdgeInsets.all(8),
+    decoration: BoxDecoration(
+      color: Colors.grey[50],
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // الصف العلوي: معلومات التوجيه
+        Row(
+          children: [
+            Icon(Icons.send, size: 14, color: Colors.grey),
+            getWidth(4),
+            Text(
+              'موجهة إلى:',
+              style: font12black.copyWith(fontWeight: FontWeight.bold),
+            ),
+            getWidth(8),
+            Expanded(
+              child: Text(
                 _getRoleDisplayText(complaint.targetRole),
                 style: font12black,
+                overflow: TextOverflow.ellipsis,
               ),
-              const Spacer(),
-              
-              // زر إعادة التوجيه
-              if (onReassign != null)
-                GestureDetector(
-                  onTap: () {},//الارسال في الخاص لحل الشكوى
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: ColorsApp.primaryColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.change_circle, size: 12, color: ColorsApp.primaryColor),
-                        getWidth(4),
-                        Text(
-                          'إعادة توجيه',
-                          style: TextStyle(
-                            color: ColorsApp.primaryColor,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+            ),
+          ],
+        ),
+        getHeight(4),
+        // الصف السفلي: زر إعادة التوجيه (محاذاة لليمين)
+        if (onReassign != null)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: GestureDetector(
+              onTap: () {},
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: ColorsApp.primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(6),
                 ),
-            ],
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.change_circle, size: 12, color: ColorsApp.primaryColor),
+                    getWidth(4),
+                    Text(
+                      'إعادة توجيه',
+                      style: font10Primary,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
-        ],
-      ),
-    );
-  }
+      ],
+    ),
+  );
+}
 
   // 💬 قسم رد الإدارة
   Widget _buildAdminReplySection() {
@@ -369,11 +372,11 @@ class ComplaintCard extends StatelessWidget {
   }
 
   // 🗑️ زر الحذف منفصل
-  Widget _buildDeleteButton() {
+  Widget _buildDeleteButton(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
       child: GestureDetector(
-        onTap: onDelete,
+        onTap: () => _showDeleteConfirmationDialog(context),
         child: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
@@ -399,7 +402,44 @@ class ComplaintCard extends StatelessWidget {
       ),
     );
   }
-
+  /// 🗑️ عرض رسالة تأكيد الحذف
+void _showDeleteConfirmationDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Row(
+        children: [
+          Icon(Icons.delete, color: Colors.red),
+          SizedBox(width: 8),
+          Text('تأكيد الحذف'),
+        ],
+      ),
+      content: const Text(
+        'هل أنت متأكد من أنك تريد حذف هذه الشكوى؟\nلا يمكن التراجع عن هذا الإجراء.',
+        textAlign: TextAlign.right,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('إلغاء'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context); // إغلاق نافذة التأكيد
+            onDelete(); // تنفيذ الحذف
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+          ),
+          child: const Text(
+            'نعم، احذف',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ],
+    ),
+  );
+}
   // 🎯 زر تغيير الحالة
   Widget _buildStatusButton(BuildContext context,String text, String status, IconData icon, Color color) {
     return GestureDetector(
@@ -695,10 +735,11 @@ void _showPreSelectedReplyDialog(BuildContext context, String preSelectedStatus,
                     suffixIcon: hasExistingReply ? IconButton(
                       icon: Icon(Icons.delete_outline, color: Colors.red[300]),
                       onPressed: () {
-                        setState(() {
-                          replyController.clear();
-                          hasExistingReply = false;
-                        });
+                        _showDeleteReplyConfirmationDialog(
+                          context, 
+                          replyController, 
+                          () => setState(() => hasExistingReply = false)
+                        );
                       },
                     ) : null,
                   ),
@@ -708,29 +749,6 @@ void _showPreSelectedReplyDialog(BuildContext context, String preSelectedStatus,
                     });
                   },
                 ),
-                getHeight(8),
-                // 🗑️ زر حذف الرد (يظهر فقط إذا كان هناك رد موجود)
-                if (complaint.adminReply != null && complaint.adminReply!.isNotEmpty)
-                  Container(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      onPressed: () {
-                        setState(() {
-                          replyController.clear();
-                          hasExistingReply = false;
-                        });
-                      },
-                      icon: Icon(Icons.delete_outline, size: 18, color: Colors.red),
-                      label: Text(
-                        'حذف الرد الحالي',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.red),
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                      ),
-                    ),
-                  ),
                 
                 getHeight(8),
                 // 💡 تلميحات الرد التلقائي
@@ -787,6 +805,49 @@ void _showPreSelectedReplyDialog(BuildContext context, String preSelectedStatus,
     ),
   );
   }
+  /// 🗑️ عرض رسالة تأكيد حذف الرد
+void _showDeleteReplyConfirmationDialog(
+  BuildContext context, 
+  TextEditingController replyController, 
+  VoidCallback onDeleteConfirmed
+) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Row(
+        children: [
+          Icon(Icons.delete_outline, color: Colors.orange),
+          SizedBox(width: 8),
+          Text('حذف الرد'),
+        ],
+      ),
+      content: const Text(
+        'هل أنت متأكد من أنك تريد حذف الرد الحالي؟',
+        textAlign: TextAlign.right,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('إلغاء'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            replyController.clear();
+            onDeleteConfirmed();
+            Navigator.pop(context);
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.orange,
+          ),
+          child: const Text(
+            'نعم، احذف',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
   // 🎯 بناء شريط اقتراح الرد
   Widget _buildSuggestionChip(String text, TextEditingController controller) {

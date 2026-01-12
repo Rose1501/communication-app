@@ -4,7 +4,7 @@ abstract class SignUpEvent extends Equatable {
   const SignUpEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object> props() => [];
 }
 
 class SignUpRequired extends SignUpEvent{

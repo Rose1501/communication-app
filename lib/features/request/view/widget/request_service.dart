@@ -88,30 +88,85 @@ class RequestService {
     required String requestId,
     required String studentID,
   }) {
+    // 🔥 حفظ الـ Bloc قبل فتح الحوار
+  final requestBloc = context.read<RequestBloc>();
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      barrierDismissible: false,
+      builder: (dialogContext) => AlertDialog(
         title: Text('حذف الطلب'),
         content: Text('هل أنت متأكد من حذف هذا الطلب؟'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+            print('❌ إلغاء حذف الطلب: $requestId');
+            Navigator.pop(dialogContext);
+            },
             child: Text('إلغاء'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
-              deleteRequest(
-                context: context,
-                requestId: requestId,
-                studentID: studentID,
-              );
-            },
+            print('✅ تأكيد حذف الطلب: $requestId');
+            
+            // إغلاق الحوار أولاً
+            Navigator.pop(dialogContext);
+            
+            // 🔥 تنفيذ الحذف بعد إغلاق الحوار مباشرة
+            _executeDeleteAfterDialog(
+              requestBloc: requestBloc,
+              requestId: requestId,
+              studentID: studentID,
+              context: context,
+            );
+          },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: Text('حذف'),
           ),
         ],
       ),
     );
+  }
+
+  // 🔥 دالة مساعدة لتنفيذ الحذف بعد إغلاق الحوار
+static Future<void> _executeDeleteAfterDialog({
+  required RequestBloc requestBloc,
+  required String requestId,
+  required String studentID,
+  required BuildContext context,
+}) async {
+  // التحقق من الاتصال بالإنترنت
+  final isConnected = await RequestUtils.checkInternetConnection(context);
+  if (!isConnected) {
+    ShowWidget.showMessage(context, noNet, Colors.black, 
+        TextStyle(color: Colors.white, fontSize: 11));
+    return;
+  }
+  
+  try {
+    print('🚀 بدء عملية حذف الطلب...');
+    
+    // 🔥 استخدام Future.delayed لضمان إغلاق الحوار تماماً
+    await Future.delayed(const Duration(milliseconds: 100));
+    
+    // استدعاء حدث الحذف باستخدام الـ Bloc المحفوظ
+    requestBloc.add(DeleteRequestEvent(requestId, studentID));
+    
+    // إظهار رسالة تأكيد
+    ShowWidget.showMessage(
+      context,
+      'جاري حذف الطلب...',
+      Colors.orange,
+      TextStyle(color: Colors.white, fontSize: 13),
+    );
+    
+  } catch (e) {
+    print('❌ خطأ في استدعاء حذف الطلب: $e');
+    ShowWidget.showMessage(
+      context,
+      'فشل في بدء عملية الحذف',
+      Colors.red,
+      TextStyle(color: Colors.white, fontSize: 13),
+    );
+  }
   }
 }

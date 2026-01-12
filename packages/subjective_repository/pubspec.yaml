@@ -1,0 +1,25 @@
+name: subjective_repository
+description: Dart package for managing subjective groups, curriculum, and homework.
+publish_to: "none"
+version: 1.0.0
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cloud_firestore: ^6.0.0
+  equatable: ^2.0.7
+  semester_repository: 
+    path: ../semester_repository
+  notification_repository:
+    path: ../notification_repository
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

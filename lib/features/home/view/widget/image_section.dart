@@ -9,7 +9,7 @@ import 'package:myproject/components/widget/image_preview_dialog.dart';
 import 'package:myproject/components/widget/image_picker_service.dart';
 // قسم إدارة الصور في نموذج تعديل الإعلان
 class ImageSection extends StatelessWidget {
-  final AdvertisementModel advertisement;
+  final AdvertisemenModel advertisement;
   final File? newImage;
   final Function(File) onImagePicked;
   final Function() onImageRemoved;

@@ -5,7 +5,7 @@ abstract class AdvertisementState extends Equatable {
   const AdvertisementState();
 
   @override
-  List<Object> get props => [];
+  List<Object> props() => [];
 }
 
 // الحالة الأولية
@@ -16,12 +16,12 @@ class AdvertisementLoading extends AdvertisementState {}
 
 // حالة التحميل الناجح
 class AdvertisementLoaded extends AdvertisementState {
-  final List<AdvertisementModel> advertisements;
+  final List<AdvertisemenModel> advertisements;
 
   const AdvertisementLoaded({required this.advertisements});
 
   @override
-  List<Object> get props => [advertisements];
+  List<Object> props() => [advertisements];
 }
 
 // حالة التحميل الفاشل
@@ -31,27 +31,27 @@ class AdvertisementError extends AdvertisementState {
   const AdvertisementError({required this.message});
 
   @override
-  List<Object> get props => [message];
+  List<Object> props() => [message];
 }
 
 // حالة الإضافة الناجحة
 class AdvertisementAdded extends AdvertisementState {
-  final AdvertisementModel advertisement;
+  final AdvertisemenModel advertisement;
 
   const AdvertisementAdded({required this.advertisement});
 
   @override
-  List<Object> get props => [advertisement];
+  List<Object> props() => [advertisement];
 }
 
 // حالة التحديث الناجح
 class AdvertisementUpdated extends AdvertisementState {
-  final AdvertisementModel advertisement;
+  final AdvertisemenModel advertisement;
 
   const AdvertisementUpdated({required this.advertisement});
 
   @override
-  List<Object> get props => [advertisement];
+  List<Object> props() => [advertisement];
 }
 
 // حالة الحذف الناجح
@@ -61,7 +61,7 @@ class AdvertisementDeleted extends AdvertisementState {
   const AdvertisementDeleted({required this.advertisementId});
 
   @override
-  List<Object> get props => [advertisementId];
+  List<Object> props() => [advertisementId];
 }
 
 // 🔥 state جديد لإزالة الصورة (اختياري)
@@ -72,10 +72,10 @@ class AdvertisementImageRemoved extends AdvertisementState {
 
 // حالة نجاح إعادة النشر
 class AdvertisementRepublished extends AdvertisementState {
-  final AdvertisementModel advertisement;
+  final AdvertisemenModel advertisement;
 
   const AdvertisementRepublished({required this.advertisement});
 
   @override
-  List<Object> get props => [advertisement];
+  List<Object> props() => [advertisement];
 }

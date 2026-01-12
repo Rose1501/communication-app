@@ -59,7 +59,7 @@ class StudentRequestEntity extends Equatable {
 
 
   @override
-  List<Object?> get props => [
+  List<Object?> props() => [
         id,
         studentID,
         name,

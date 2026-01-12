@@ -2,7 +2,7 @@ import 'package:advertisement_repository/src/entities/entities.dart';
 import 'package:equatable/equatable.dart';
 import 'package:user_repository/user_repository.dart';
 
-class AdvertisementModel extends Equatable {
+class AdvertisemenModel extends Equatable {
   final String id;
   final String description;
   final DateTime timeAdv;
@@ -11,7 +11,7 @@ class AdvertisementModel extends Equatable {
   final String custom;
   final UserModels user; 
 
-  const AdvertisementModel({
+  const AdvertisemenModel({
     required this.id,
     required this.description,
     required this.timeAdv,
@@ -22,7 +22,7 @@ class AdvertisementModel extends Equatable {
   });
 
   // نموذج إعلان فارغ
-  static final empty = AdvertisementModel(
+  static final empty = AdvertisemenModel(
     id: '',
     description: '',
     timeAdv: DateTime.now(),
@@ -33,13 +33,13 @@ class AdvertisementModel extends Equatable {
   );
 
   // التحقق إذا كان النموذج فارغاً
-  bool get isEmpty => this == AdvertisementModel.empty;
+  bool get isEmpty => this == AdvertisemenModel.empty;
   
   // التحقق إذا كان النموذج غير فارغ
-  bool get isNotEmpty => this != AdvertisementModel.empty;
+  bool get isNotEmpty => this != AdvertisemenModel.empty;
 
   // نسخ النموذج مع إمكانية تعديل بعض الخصائص
-  AdvertisementModel copyWith({
+  AdvertisemenModel copyWith({
     String? id,
     String? description,
     DateTime? timeAdv,
@@ -48,7 +48,7 @@ class AdvertisementModel extends Equatable {
     String? custom,
     UserModels? user,
   }) {
-    return AdvertisementModel(
+    return AdvertisemenModel(
       id: id ?? this.id,
       description: description ?? this.description,
       timeAdv: timeAdv ?? this.timeAdv,
@@ -73,8 +73,8 @@ class AdvertisementModel extends Equatable {
   }
 
   // إنشاء نموذج من كيان
-  static AdvertisementModel fromEntity(AdvertisementEntity entity) {
-    return AdvertisementModel(
+  static AdvertisemenModel fromEntity(AdvertisementEntity entity) {
+    return AdvertisemenModel(
       id: entity.id,
       description: entity.description,
       timeAdv: entity.timeAdv,
@@ -86,7 +86,7 @@ class AdvertisementModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
+  List<Object?> props() => [
         id,
         description,
         timeAdv,

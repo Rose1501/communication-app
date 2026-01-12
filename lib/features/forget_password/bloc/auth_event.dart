@@ -4,7 +4,7 @@ abstract class AuthEvent extends Equatable {
   const AuthEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object> props() => [];
 }
 
 class ChangePasswordRequested extends AuthEvent {
@@ -17,7 +17,7 @@ class ChangePasswordRequested extends AuthEvent {
   });
 
   @override
-  List<Object> get props => [currentPassword, newPassword];
+  List<Object> props() => [currentPassword, newPassword];
 }
 
 // حدث لتعيين البريد الإلكتروني في الحالة
@@ -27,7 +27,7 @@ class EmailSetEvent extends AuthEvent {
   const EmailSetEvent(this.email);
 
   @override
-  List<Object> get props => [email];
+  List<Object> props() => [email];
 }
 
 class ResetPasswordRequested extends AuthEvent {
@@ -36,7 +36,7 @@ class ResetPasswordRequested extends AuthEvent {
   const ResetPasswordRequested({required this.email});
 
   @override
-  List<Object> get props => [email];
+  List<Object> props() => [email];
 }
 
 class SendResetCodeRequested extends AuthEvent {
@@ -44,7 +44,7 @@ class SendResetCodeRequested extends AuthEvent {
 
   const SendResetCodeRequested(this.email);
   @override
-  List<Object> get props => [email];
+  List<Object> props() => [email];
 }
 
 class VerifyResetCodeRequested extends AuthEvent {
@@ -53,7 +53,7 @@ class VerifyResetCodeRequested extends AuthEvent {
   const VerifyResetCodeRequested(this.code);
 
   @override
-  List<Object> get props => [code];
+  List<Object> props() => [code];
 }
 class ResetPasswordWithCodeRequested extends AuthEvent {
   final String code;
@@ -65,7 +65,7 @@ class ResetPasswordWithCodeRequested extends AuthEvent {
   });
 
   @override
-  List<Object> get props => [code, newPassword];
+  List<Object> props() => [code, newPassword];
 }
 
 /*class ResetPasswordWithCodeSubmitted extends AuthEvent {

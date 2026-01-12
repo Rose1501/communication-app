@@ -19,6 +19,8 @@ class UserProfileInfoSection extends StatelessWidget {
         SizedBox(height: 16.h),
         _buildInfoField('الرقم الوطني', userModel.na_Number, Icons.badge),
         SizedBox(height: 16.h),
+        userModel.role == 'Doctor' || userModel.role == 'doctor'?
+        _buildInfoField('رقم الاكاديمي', userModel.userID, Icons.description):
         _buildInfoField('رقم القيد', userModel.userID, Icons.description),
       ],
     );

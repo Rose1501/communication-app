@@ -4,7 +4,7 @@ abstract class RequestEvent extends Equatable {
   const RequestEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object> props() => [];
 }
 
 class SendRequestEvent extends RequestEvent {
@@ -12,7 +12,7 @@ class SendRequestEvent extends RequestEvent {
   const SendRequestEvent(this.request);
 
   @override
-  List<Object> get props => [request];
+  List<Object> props() => [request];
 }
 
 class LoadStudentRequestsEvent extends RequestEvent {
@@ -20,7 +20,7 @@ class LoadStudentRequestsEvent extends RequestEvent {
   const LoadStudentRequestsEvent(this.studentID);
 
   @override
-  List<Object> get props => [studentID];
+  List<Object> props() => [studentID];
 }
 
 class LoadAllRequestsEvent extends RequestEvent {}
@@ -32,7 +32,7 @@ class UpdateRequestStatusEvent extends RequestEvent {
   const UpdateRequestStatusEvent(this.requestId, this.status, {this.adminReply});
 
   @override
-  List<Object> get props => [requestId, status];
+  List<Object> props() => [requestId, status];
 }
 
 class DeleteRequestEvent extends RequestEvent {
@@ -41,7 +41,7 @@ class DeleteRequestEvent extends RequestEvent {
   const DeleteRequestEvent(this.requestId, this.studentID);
 
   @override
-  List<Object> get props => [requestId, studentID];
+  List<Object> props() => [requestId, studentID];
 }
 
 // 🔥  لحذف جميع الطلبات

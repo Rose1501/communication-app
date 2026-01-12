@@ -14,7 +14,7 @@ import 'package:myproject/features/home/view/widget/image_section.dart';
 import 'package:user_repository/user_repository.dart';
 
 class RepublishAdvertisementDialog extends StatefulWidget {
-  final AdvertisementModel advertisement;
+  final AdvertisemenModel advertisement;
   final UserModels currentUser;
 
   const RepublishAdvertisementDialog({
