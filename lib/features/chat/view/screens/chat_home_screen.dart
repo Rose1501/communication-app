@@ -315,7 +315,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> with SingleTickerProvid
               }
             }
 
-            return Center(child: CircularProgressIndicator(color: ColorsApp.orange));
+            return Center(child: CircularProgressIndicator(color: ColorsApp.primaryColor));
           },
         ),
       ),

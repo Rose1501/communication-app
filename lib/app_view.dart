@@ -27,11 +27,21 @@ class MyAppView extends StatelessWidget {
           onGenerateRoute: appRouter.generateRoute,
           home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
             builder: (context, state) {
-              if (state.status == AuthenticationStatus.authenticated) {
+              debugPrint('🏠 Building home with status: ${state.status}, isFirstLaunch: ${state.isFirstLaunch}');
+              // إذا كان التشغيل الأول، اعرض SplashScreen
+              if (state.isFirstLaunch) {
+                debugPrint('🎬 Showing SplashScreen');
+                return SplashScreen();
+              }
+              // خلاف ذلك، اعرض الشاشة المناسبة بناءً على حالة المصادقة
+              else  if (state.status == AuthenticationStatus.authenticated) {
+                debugPrint('🏠 Showing HomeScreen');
                 return const HomeScreen();
               } else if (state.status == AuthenticationStatus.unauthenticated) {
+                debugPrint('👋 Showing OnboardingScreen');
                 return const OnboardingScreen();
               } else {
+                debugPrint('🎬 Default SplashScreen');
                 return SplashScreen();
               }
             },

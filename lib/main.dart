@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:myproject/firebase_options.dart';
 import 'package:myproject/services/notification_service.dart';
 import 'package:notification_repository/notification_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:user_repository/user_repository.dart';
 import 'app.dart';
 
@@ -17,6 +18,8 @@ void main() async{
   );
   // Ensure the app runs in portrait mode only
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  // تهيئة SharedPreferences
+  await SharedPreferences.getInstance();
   
   final userRepository = FirebaseUserRepository();
   // إنشاء instance من NotificationsRepository

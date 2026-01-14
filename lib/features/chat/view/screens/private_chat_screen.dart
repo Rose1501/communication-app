@@ -460,7 +460,7 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
         child: BlocBuilder<ChatBloc, ChatState>(
           builder: (context, state) {
             if (state is ChatLoading && !(state is ChatSending)) {
-              return const Center(child: CircularProgressIndicator());
+              return  Center(child: CircularProgressIndicator(color: ColorsApp.primaryColor,));
             }
             if (state is PrivateMessagesLoaded) {
               final messages = state.messages;
@@ -487,7 +487,7 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
             if (state is ChatSending) {
               return _buildMessagesList(_currentMessages);
             }
-            return const Center(child: CircularProgressIndicator());
+            return  Center(child: CircularProgressIndicator(color: ColorsApp.primaryColor,));
           },
         ),
       ),

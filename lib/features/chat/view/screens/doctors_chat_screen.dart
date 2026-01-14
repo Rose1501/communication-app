@@ -482,7 +482,7 @@ class _DoctorsChatScreenState extends State<DoctorsChatScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircularProgressIndicator(color: ColorsApp.orange),
+                    CircularProgressIndicator(color: ColorsApp.primaryColor),
                     const SizedBox(height: 16),
                     Text('جاري تحميل الرسائل...', style: font14grey),
                   ],

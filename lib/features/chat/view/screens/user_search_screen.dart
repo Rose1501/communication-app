@@ -194,7 +194,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
               child: BlocBuilder<UserManagementBloc, UserManagementState>(
                 builder: (context, userState) {
                   if (userState.status == UserManagementStatus.loading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return  Center(child: CircularProgressIndicator(color: ColorsApp.primaryColor,));
                   }
 
                   if (userState.status == UserManagementStatus.error) {

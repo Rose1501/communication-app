@@ -9,7 +9,20 @@ abstract class AuthenticationEvent extends Equatable {
 }
 
 class AuthenticationUserChanged extends AuthenticationEvent {
-  const AuthenticationUserChanged(this.user);
+  const AuthenticationUserChanged(this.user, {this.isFirstLaunch = true});
 
   final User? user;
+  final bool isFirstLaunch;
+}
+
+class AuthenticationStatusChanged extends AuthenticationEvent {
+  const AuthenticationStatusChanged({
+    required this.status,
+    this.user,
+    this.isFirstLaunch = false,
+  });
+
+  final AuthenticationStatus status;
+  final User? user;
+  final bool isFirstLaunch;
 }
